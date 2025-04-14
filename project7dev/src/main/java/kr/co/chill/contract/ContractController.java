@@ -5,8 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +25,8 @@ import kr.co.chill.supplier.SupplierService;
 
 @Controller
 public class ContractController {
+	@Autowired
+	private ServletContext servletContext;
 	
 	@Inject
 	ContractService contractService;
@@ -92,13 +97,15 @@ public class ContractController {
 	//신규등록3 - 작성한 계약서 db에 등록
 	@PostMapping("contract/createContract")
 	public String createContract(@ModelAttribute("contract")ContractDTO contractDTO
-			,@RequestParam("quotFile") MultipartFile quotFile
-			,HttpSession session) throws Exception {
-	    if (!quotFile.isEmpty()) {
-	        String uploadDir = "/path/to/save/files/"; // 저장 경로
-	        String fileName = quotFile.getOriginalFilename();
+			,@RequestParam("file") MultipartFile file
+			,HttpSession session
+			,HttpServletRequest request) throws Exception {
+	    if (!file.isEmpty()) {
+	        String uploadDir = servletContext.getRealPath("/resources/file/");
+	        
+	        String fileName = file.getOriginalFilename();
 	        File dest = new File(uploadDir + fileName);
-	        quotFile.transferTo(dest);
+	        file.transferTo(dest);
 
 	        contractDTO.setContFile(fileName); // DB에 파일명 저장
 	    }

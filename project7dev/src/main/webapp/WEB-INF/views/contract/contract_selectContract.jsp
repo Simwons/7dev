@@ -101,7 +101,7 @@
 			     
 			      <tr>
 			      	<td class="label-cell" style="width:15%;">계약서</td>
-			      	<td style="width:35%;">${contract.contFile}</td>
+			      	<td style="width:35%;"> <a href="${contextPath}/resources/file/${contract.contFile}" target="_blank">${contract.contFile}</a></td>
 			      </tr>
 			    </tbody>
 			  </table>
@@ -128,7 +128,6 @@
 		  <button onclick="closeSupplierModal()">닫기</button>
 		</div>
 	    
-	    
 		<script>
 		function toggleDaysInput(enabled) {
 		    const daysInput = document.getElementById('daysInput');
@@ -153,9 +152,6 @@
 
 		    document.getElementById('quotPterms').value = method + ", " + timing;
 		});
-		
-	
-
 		</script>
 </body>
 </html>

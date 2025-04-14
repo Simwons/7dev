@@ -20,7 +20,7 @@
 <br><br><br>
 	    <h3>계약 신규등록</h3>
 	    <h6>*모든항목 필수입력</h6>
-	    <form action="${contextPath}/contract/createContract" method="post">
+	    <form action="${contextPath}/contract/createContract" method="post" enctype="multipart/form-data">
 			  <table border="1" cellpadding="5" cellspacing="0" style="width:100%; table-layout: fixed; border-collapse: collapse; text-align:center;">
 			    <tbody>
 			    <input type="hidden" name="quotNo" value="${quotation.quotNo}">
@@ -138,7 +138,7 @@
 			     
 			      <tr>
 			      	<td class="label-cell" style="width:15%;">계약서</td>
-			      	<td style="width:35%;"><input type="file" name="quotFile"style="width:90%; box-sizing: border-box;" ></td>
+			      	<td style="width:35%;"><input type="file" name="file"style="width:90%; box-sizing: border-box;" ></td>
 			      </tr>
 			    </tbody>
 			  </table>

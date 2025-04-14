@@ -1,22 +1,30 @@
 package kr.co.chill.quotation;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.chill.material.MaterialDTO;
 import kr.co.chill.material.MaterialService;
 
 @Controller
 public class QuotationController {
+	@Autowired
+	private ServletContext servletContext;
 	
 	@Inject
 	QuotationService quotationService;
@@ -71,7 +79,21 @@ public class QuotationController {
 	
 	//신규등록3 - 작성한 견적서 db에 등록
 	@PostMapping("quotation/createQuotation")
-	public String createQuotation(@ModelAttribute("quotation")QuotationDTO quotationDTO) throws Exception {
+	public String createQuotation(@ModelAttribute("quotation")QuotationDTO quotationDTO
+			,@RequestParam("quotFile") MultipartFile quotFile
+			,HttpServletRequest request
+			,HttpSession session) throws Exception {
+	    if (!quotFile.isEmpty()) {
+	        String uploadDir = servletContext.getRealPath("/resources/file/");
+	        
+	        
+	        String fileName = quotFile.getOriginalFilename();
+	        File dest = new File(uploadDir + fileName);
+	        quotFile.transferTo(dest);
+
+	        quotationDTO.setQuotFile(fileName); // DB에 파일명 저장
+	    }
+		
 		quotationService.createQuotation(quotationDTO);
 		return "redirect:/quotation/quotation_main";
 	}

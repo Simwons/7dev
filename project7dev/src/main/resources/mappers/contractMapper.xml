@@ -43,9 +43,9 @@
 	<!-- 계약정보 등록하기 -->
 	<insert id="createContract" parameterType="ContractDTO">
 		insert into contract(cont_code, sup_no, cont_date, cont_period, emp_no, quot_no, cont_material_cnt, cont_material_sku, 
-		cont_leadtime, cont_dterms, cont_pterms, mprice_no)	
+		cont_leadtime, cont_dterms, cont_pterms, cont_file, mprice_no)	
 		values(#{contCode}, #{supNo}, #{contDate}, #{contPeriod}, 2, #{quotNo}, #{contMaterialCnt}, #{contMaterialSku}, 
-		#{contLeadtime}, #{contDterms}, #{contPterms}, #{mpriceNo})
+		#{contLeadtime}, #{contDterms}, #{contPterms}, #{contFile}, #{mpriceNo})
 	</insert>
 	<!-- 자재단가테이블 등록용 -->
 	<insert id="createMprice" parameterType="ContractDTO" useGeneratedKeys="true" keyProperty="mpriceNo">
