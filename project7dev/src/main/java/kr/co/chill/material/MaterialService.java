@@ -10,6 +10,10 @@ public interface MaterialService {
 	List<MaterialDTO> searchMaterial(Map<String, Object> searchMap) throws Exception;
 	//부품코드로 부품조회
 	List<MaterialDTO> getMaterialByMaterialCode(Map<String, Object> searchMap) throws Exception;
+	//부품 내의 제품코드로 해당부품이 어디에 쓰이는지 조회용(bom)
+	List<MaterialDTO> getMaterialByProductNo(int productNo) throws Exception;
+	//부품번호로 부품조회
+	MaterialDTO getMaterialByMaterialNo(int materialNo)throws Exception;
 	//등록
 	void createMaterial(MaterialDTO materialDTO) throws Exception;
 	//수정: 사용되는 제품(BOM작성 시)

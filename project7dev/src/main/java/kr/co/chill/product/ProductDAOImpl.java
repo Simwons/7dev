@@ -35,6 +35,13 @@ public class ProductDAOImpl implements ProductDAO {
 		return sqlSession.selectList("kr.co.chill.productMapper.getProductByProductCode", searchMap);
 	}
 
+	//품목번호로 bom조회
+	@Override
+	public ProductDTO getProductByProductNo(int productNo) throws Exception {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne("kr.co.chill.productMapper.getProductByProductNo", productNo);
+	}
+	
 	//등록
 	@Override
 	public void createProduct(ProductDTO productDTO) throws Exception {
@@ -55,6 +62,7 @@ public class ProductDAOImpl implements ProductDAO {
 		// TODO Auto-generated method stub
 		sqlSession.delete("kr.co.chill.productMapper.deleteProduct", productNo);
 	}
+
 
 
 	

@@ -1,6 +1,7 @@
 package kr.co.chill.supplier;
 
 public class SupplierDTO {
+	private int supNo;				//거래처고유번호
 	private String supCategory;		//업종분류
 	private String supRegNo;		//사업자등록번호
 	private String supName;			//거래처명
@@ -17,10 +18,15 @@ public class SupplierDTO {
 	private String supPassword;		//거래처계정 비밀번호
 	private String supEtc;			//기타사항
 	
-	public SupplierDTO(String supCategory, String supRegNo, String supName, String supCeoName, String supPhone,
-			String supEmail, String supAddr1, String supAddr2, String supCip, String supCipPhone, String supCipEmail,
-			String supId, String supPassword, String supEtc) {
+	public SupplierDTO() {
 		super();
+	}
+
+	public SupplierDTO(int supNo, String supCategory, String supRegNo, String supName, String supCeoName,
+			String supPhone, String supEmail, String supAddr1, String supAddr2, String supCip, String supCipPhone,
+			String supCipEmail, String supId, String supPassword, String supEtc) {
+		super();
+		this.supNo = supNo;
 		this.supCategory = supCategory;
 		this.supRegNo = supRegNo;
 		this.supName = supName;
@@ -35,6 +41,14 @@ public class SupplierDTO {
 		this.supId = supId;
 		this.supPassword = supPassword;
 		this.supEtc = supEtc;
+	}
+
+	public int getSupNo() {
+		return supNo;
+	}
+
+	public void setSupNo(int supNo) {
+		this.supNo = supNo;
 	}
 
 	public String getSupCategory() {
@@ -151,11 +165,13 @@ public class SupplierDTO {
 
 	@Override
 	public String toString() {
-		return "SupplierDTO [supCategory=" + supCategory + ", supRegNo=" + supRegNo + ", supName=" + supName
-				+ ", supCeoName=" + supCeoName + ", supPhone=" + supPhone + ", supEmail=" + supEmail + ", supAddr1="
-				+ supAddr1 + ", supAddr2=" + supAddr2 + ", supCip=" + supCip + ", supCipPhone=" + supCipPhone
-				+ ", supCipEmail=" + supCipEmail + ", supId=" + supId + ", supPassword=" + supPassword + ", supEtc="
-				+ supEtc + "]";
+		return "SupplierDTO [supNo=" + supNo + ", supCategory=" + supCategory + ", supRegNo=" + supRegNo + ", supName="
+				+ supName + ", supCeoName=" + supCeoName + ", supPhone=" + supPhone + ", supEmail=" + supEmail
+				+ ", supAddr1=" + supAddr1 + ", supAddr2=" + supAddr2 + ", supCip=" + supCip + ", supCipPhone="
+				+ supCipPhone + ", supCipEmail=" + supCipEmail + ", supId=" + supId + ", supPassword=" + supPassword
+				+ ", supEtc=" + supEtc + "]";
 	}
+	
+	
 	
 }

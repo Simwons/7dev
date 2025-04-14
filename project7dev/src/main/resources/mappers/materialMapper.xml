@@ -24,11 +24,23 @@
 		select * from material
 		where material_code LIKE CONCAT('%', #{searchValue}, '%')
 	</select>
+	<!-- 부품 내의 제품코드로 해당부품이 어디에 쓰이는지 조회용(bom) -->
+	<select id="getMaterialByProductNo" parameterType="int" resultType="MaterialDTO">
+		select *
+		from material
+		where product_no = #{productNo}
+	</select>
+	<!-- materialNo로 부품조회 -->
+	<select id="getMaterialByMaterialNo" parameterType="int" resultType="MaterialDTO">
+		select *
+		from material
+		where material_no = #{materialNo}
+	</select>
 	
 	<!-- 자재정보 추가(1차 - 부품등록 시 작성) -->
 	<insert id="createMaterial" parameterType="MaterialDTO">
-		insert into material(material_name, material_code, material_description, material_unit,material_file, product_no, sup_no)
-		values(#{materialName}, #{materialCode}, #{materialDescription}, #{materialUnit}, #{materialFile}, 0, 0)
+		insert into material(material_name, material_code, material_raw_material, material_description, material_unit, material_quantity, material_file, product_no, sup_no)
+		values(#{materialName}, #{materialCode}, #{materialRawMaterial}, #{materialDescription}, #{materialUnit}, #{materialQuantity}, #{materialFile}, #{productNo}, 0)
 	</insert>	
 	
 	<!-- 자재정보 내 제품번호 수정(제품 bom 작성 시 사용) -->

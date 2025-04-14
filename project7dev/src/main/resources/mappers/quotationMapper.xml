@@ -5,15 +5,35 @@
 <mapper namespace="kr.co.chill.quotationMapper">
 	<!-- 견적정보 불러오기(기본셋) -->
 	<select id="readQuotation" resultType="QuotationDTO">
-		select supplier.sup_name, supplier.sup_reg_no, material.material_name 
+		select supplier.sup_name, supplier.sup_reg_no, material.material_name, material.material_code, quot_code, quot_no
 		from quotation
 		join supplier on quotation.sup_no = supplier.sup_no
 		join material on quotation.material_no = material.material_no
 	</select>
 	<!-- 견적정보 상세조회(선택) -->
 	<select id="readQuotationByQuotNo" resultType="QuotationDTO">
-		select quotation.*, supplier.sup_name, supplier.sup_reg_no, material.material_name, material.material_code, 
-		material.material_raw_material, material.material_description, material.material_unit 
+		select quotation.quot_no as quotNo, 
+        quotation.quot_code as quotCode,
+        quotation.sup_no as supNo, 
+        quotation.quot_file as quotFile,
+        quotation.quot_dterms as quotDterms, 
+        quotation.quot_pterms as quotPterms,
+        quotation.material_no as materialNo, 
+        quotation.quot_price as quotPrice, 
+        quotation.quot_price_currency as quotPriceCurrency, 
+        quotation.quot_material_cnt as quotMaterialCnt, 
+        quotation.quot_material_sku as quotMaterialSku, 
+        quotation.quot_due_date as quotDueDate, 
+        quotation.quot_etc as quotEtc,
+        
+        supplier.sup_name as supName, 
+        supplier.sup_reg_no as supRegNo,
+        
+        material.material_name as materialName, 
+        material.material_code as materialCode, 
+        material.material_raw_material as materialRawMaterial, 
+        material.material_description as materialDescription, 
+        material.material_unit as materialUnit
 		from quotation
 		join supplier on quotation.sup_no = supplier.sup_no
 		join material on quotation.material_no = material.material_no
@@ -21,11 +41,21 @@
 	</select>	
 	<!-- 견적정보 검색조회(견적코드 사용, 견적관리 전용) -->
 	<select id="searchQuotation" parameterType="map" resultType="QuotationDTO">
-		select * from quotation 	
+		select quotation.*, supplier.sup_name, supplier.sup_reg_no, material.material_name, material.material_code, 
+		material.material_raw_material, material.material_description, material.material_unit 
+		from quotation 	
+    	join supplier on quotation.sup_no = supplier.sup_no
+		join material on quotation.material_no = material.material_no
 		<where>
        		<if test="searchType == 'quotCode' and searchValue != null and searchValue != ''">
-            	AND quot_code LIKE CONCAT('%', #{searchValue}, '%')
+            	AND quotation.quot_code LIKE CONCAT('%', #{searchValue}, '%')
         	</if>
+       		<if test="searchType == 'materialCode' and searchValue != null and searchValue != ''">
+            	AND material.material_code LIKE CONCAT('%', #{searchValue}, '%')
+        	</if>
+       		<if test="searchType == 'supName' and searchValue != null and searchValue != ''">
+            	AND supplier.sup_name LIKE CONCAT('%', #{searchValue}, '%')
+        	</if>        	        	
     	</where>
 	</select>
 	
@@ -37,6 +67,12 @@
 		values(#{quotCode},#{supNo},#{quotFile},#{quotDterms},#{quotPterms},#{materialNo},#{quotPrice},#{quotPriceCurrency},
 		#{quotMaterialCnt},#{quotMaterialSku},#{quotDueDate},#{quotEtc},now(),0)
 	</insert>
+	
+	<!-- 오늘 날짜인 견적 갯수 세기 -->
+	<select id="countQuotationsToday" resultType="int">
+    	SELECT COUNT(*) FROM quotation
+    	WHERE DATE_FORMAT(quot_date, '%Y%m%d') = #{todayDate}
+	</select>
 	
 	<!-- 견적정보 수정하기 -->
 	<update id="updateQuotation" parameterType="QuotationDTO">

@@ -55,5 +55,11 @@ public class QuotationDAOImpl implements QuotationDAO {
 		// TODO Auto-generated method stub
 		sqlSession.delete("kr.co.chill.quotationMapper.deleteQuotation", quotNo);
 	}
+	//오늘 견적 갯수 세기
+	@Override
+	public int countQuotationToday(String todayDate) throws Exception {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne("kr.co.chill.quotationMapper.countQuotationsToday", todayDate);
+	}
 
 }

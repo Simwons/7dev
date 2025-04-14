@@ -1,5 +1,7 @@
 package kr.co.chill.contract;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +36,13 @@ public class ContractServiceImpl implements ContractService {
 	@Override
 	public void createContract(ContractDTO contractDTO) throws Exception {
 		// TODO Auto-generated method stub
+	    String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+	    String baseCode = "CT" + today;
+
+	    int countToday = contractDAO.countContractToday(today);
+	    String newContCode = baseCode + String.format("%02d", countToday + 1);
+
+	    contractDTO.setContCode(newContCode);
 		contractDAO.createContract(contractDTO);
 	}
 	//단가등록

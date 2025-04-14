@@ -34,6 +34,13 @@ public class ProductServiceImpl implements ProductService {
 		return productDAO.getProductByProductCode(searchMap);
 	}
 
+	//품목번호로 bom조회
+	@Override
+	public ProductDTO getProductByProductNo(int productNo) throws Exception {
+		// TODO Auto-generated method stub
+		return productDAO.getProductByProductNo(productNo);
+	}
+	
 	//등록
 	@Override
 	public void createProduct(ProductDTO productDTO) throws Exception {
@@ -54,5 +61,6 @@ public class ProductServiceImpl implements ProductService {
 		// TODO Auto-generated method stub
 		productDAO.deleteProduct(productNo);
 	}
+
 	
 }

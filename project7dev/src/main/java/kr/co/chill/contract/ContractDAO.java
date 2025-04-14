@@ -14,5 +14,6 @@ public interface ContractDAO {
 	void createContract(ContractDTO contractDTO) throws Exception;
 	//단가등록
 	void createMprice(ContractDTO contractDTO) throws Exception;
-
+	//오늘계약 갯수 세기
+	int countContractToday(String todayDate) throws Exception;
 }

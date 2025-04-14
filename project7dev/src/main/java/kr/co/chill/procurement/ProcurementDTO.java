@@ -1,6 +1,8 @@
 package kr.co.chill.procurement;
 
 public class ProcurementDTO {
+	private int mppNo;				//부품조달계획고유번호
+	
 	private int mppCode;			//부품조달계획코드
 	private int mppVer;				//차수
 	private String mppRegDate;		//수립일
@@ -26,11 +28,16 @@ public class ProcurementDTO {
 	
 	private String mppEtc;			//기타사항
 
-	public ProcurementDTO(int mppCode, int mppVer, String mppRegDate, String mppFile, int prplNo, String productName,
-			String productCode, int mrpNo, String materialName, String materialCode, String mstorageCode,
-			int mrpQuantity, int mstorageStock, String mrpUnit, String mrpLeadtime, int empNo, String empName,
-			String empPhone, String empEmail, String mppEtc) {
+	public ProcurementDTO() {
 		super();
+	}
+
+	public ProcurementDTO(int mppNo, int mppCode, int mppVer, String mppRegDate, String mppFile, int prplNo,
+			String productName, String productCode, int mrpNo, String materialName, String materialCode,
+			String mstorageCode, int mrpQuantity, int mstorageStock, String mrpUnit, String mrpLeadtime, int empNo,
+			String empName, String empPhone, String empEmail, String mppEtc) {
+		super();
+		this.mppNo = mppNo;
 		this.mppCode = mppCode;
 		this.mppVer = mppVer;
 		this.mppRegDate = mppRegDate;
@@ -51,6 +58,14 @@ public class ProcurementDTO {
 		this.empPhone = empPhone;
 		this.empEmail = empEmail;
 		this.mppEtc = mppEtc;
+	}
+
+	public int getMppNo() {
+		return mppNo;
+	}
+
+	public void setMppNo(int mppNo) {
+		this.mppNo = mppNo;
 	}
 
 	public int getMppCode() {
@@ -215,12 +230,13 @@ public class ProcurementDTO {
 
 	@Override
 	public String toString() {
-		return "ProcurementDTO [mppCode=" + mppCode + ", mppVer=" + mppVer + ", mppRegDate=" + mppRegDate + ", mppFile="
-				+ mppFile + ", prplNo=" + prplNo + ", productName=" + productName + ", productCode=" + productCode
-				+ ", mrpNo=" + mrpNo + ", materialName=" + materialName + ", materialCode=" + materialCode
-				+ ", mstorageCode=" + mstorageCode + ", mrpQuantity=" + mrpQuantity + ", mstorageStock=" + mstorageStock
-				+ ", mrpUnit=" + mrpUnit + ", mrpLeadtime=" + mrpLeadtime + ", empNo=" + empNo + ", empName=" + empName
-				+ ", empPhone=" + empPhone + ", empEmail=" + empEmail + ", mppEtc=" + mppEtc + "]";
+		return "ProcurementDTO [mppNo=" + mppNo + ", mppCode=" + mppCode + ", mppVer=" + mppVer + ", mppRegDate="
+				+ mppRegDate + ", mppFile=" + mppFile + ", prplNo=" + prplNo + ", productName=" + productName
+				+ ", productCode=" + productCode + ", mrpNo=" + mrpNo + ", materialName=" + materialName
+				+ ", materialCode=" + materialCode + ", mstorageCode=" + mstorageCode + ", mrpQuantity=" + mrpQuantity
+				+ ", mstorageStock=" + mstorageStock + ", mrpUnit=" + mrpUnit + ", mrpLeadtime=" + mrpLeadtime
+				+ ", empNo=" + empNo + ", empName=" + empName + ", empPhone=" + empPhone + ", empEmail=" + empEmail
+				+ ", mppEtc=" + mppEtc + "]";
 	}
-	
+
 }

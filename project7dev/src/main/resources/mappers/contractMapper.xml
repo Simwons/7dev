@@ -5,22 +5,24 @@
 <mapper namespace="kr.co.chill.contractMapper">
 	<!-- 계약정보 불러오기(전체) -->
 	<select id="readContract" resultType="ContractDTO">
-		select contract.*, supplier.sup_name, supplier.cip_name, employee.emp_name 
+		select contract.*, supplier.sup_name, supplier.sup_cip, employee.emp_name, material.material_code, material.material_name
 		from contract
 		join supplier on contract.sup_no = supplier.sup_no
 		join employee on contract.emp_no = employee.emp_no
+		JOIN material_unit_price on contract.mprice_no = material_unit_price.mprice_no
+		JOIN material on material_unit_price.material_no = material.material_no
 	</select>
 	<!-- 계약정보 상세보기(선택) -->
 	<select id="readContractByContNo" resultType="ContractDTO">
-		select contract.*, supplier.sup_name, supplier.sup_reg_no, supplier.cip_name, employee.emp_name, quotation.quot_code, 
+		select contract.*, supplier.sup_name, supplier.sup_reg_no, supplier.sup_cip, employee.emp_name, quotation.quot_file, 
 		material.material_name, material.material_code, material.material_raw_material, material.material_description, material.material_unit,
 		material_unit_price.cont_mprice, material_unit_price.mprice_currency 
 		from contract
 		join supplier on contract.sup_no = supplier.sup_no
 		join employee on contract.emp_no = employee.emp_no
 		join quotation on contract.quot_no = quotation.quot_no
-		join material on contract.material_no = material.material_no
 		join material_unit_price on contract.mprice_no = material_unit_price.mprice_no
+		join material on material_unit_price.material_no = material.material_no
 		where cont_no=#{contNo}
 	</select>
 	<!-- 계약정보 검색조회(계약번호 사용, 계약관리 전용) -->
@@ -32,18 +34,23 @@
         	</if>
     	</where>
 	</select>	
+	<!-- 오늘 날짜인 견적 갯수 세기 -->
+	<select id="countContractsToday" resultType="int">
+    	SELECT COUNT(*) FROM contract
+    	WHERE DATE_FORMAT(cont_date, '%Y%m%d') = #{todayDate}
+	</select>
 	
 	<!-- 계약정보 등록하기 -->
 	<insert id="createContract" parameterType="ContractDTO">
 		insert into contract(cont_code, sup_no, cont_date, cont_period, emp_no, quot_no, cont_material_cnt, cont_material_sku, 
 		cont_leadtime, cont_dterms, cont_pterms, mprice_no)	
-		values(#{contCode}, #{supNo}, #{contDate}, #{contPeriod}, #{empNo}, #{quotNo}, #{contMaterialCnt}, #{contMaterialSku}, 
+		values(#{contCode}, #{supNo}, #{contDate}, #{contPeriod}, 2, #{quotNo}, #{contMaterialCnt}, #{contMaterialSku}, 
 		#{contLeadtime}, #{contDterms}, #{contPterms}, #{mpriceNo})
 	</insert>
 	<!-- 자재단가테이블 등록용 -->
-	<insert id="createMprice" parameterType="ContractDTO">
+	<insert id="createMprice" parameterType="ContractDTO" useGeneratedKeys="true" keyProperty="mpriceNo">
 		insert into material_unit_price(material_no, sell_mprice, cont_mprice, mprice_currency)
-		values(#{materialNo}, #{sellMprice}, #{contMprice}, #{mpriceCurrency})
+		values(#{materialNo}, #{contMprice}, #{contMprice}, #{mpriceCurrency})
 	</insert>
 	
 

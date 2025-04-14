@@ -31,6 +31,12 @@ public class MaterialDAOImpl implements MaterialDAO {
 		// TODO Auto-generated method stub
 		return sqlSession.selectList("kr.co.chill.materialMapper.getMaterialByMaterialCode", searchMap);
 	}
+	//부품 내의 제품코드로 해당부품이 어디에 쓰이는지 조회용(bom)
+	@Override
+	public List<MaterialDTO> getMaterialByProductNo(int productNo) throws Exception {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("kr.co.chill.materialMapper.getMaterialByProductNo", productNo);
+	}
 	//등록
 	@Override
 	public void createMaterial(MaterialDTO materialDTO) throws Exception {
@@ -60,6 +66,12 @@ public class MaterialDAOImpl implements MaterialDAO {
 	public void deleteMaterial(int materialNo) throws Exception {
 		// TODO Auto-generated method stub
 		sqlSession.delete("kr.co.chill.materialMapper.deleteMaterial", materialNo);
+	}
+	//부품번호로 부품조회
+	@Override
+	public MaterialDTO getMaterialByMaterialNo(int materialNo) throws Exception {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne("kr.co.chill.materialMapper.getMaterialByMaterialNo", materialNo);
 	}
 	
 }

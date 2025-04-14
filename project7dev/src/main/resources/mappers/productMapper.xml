@@ -5,7 +5,8 @@
 <mapper namespace="kr.co.chill.productMapper">
 	<!-- 품목정보 불러오기(기본셋) -->
 	<select id="readProduct" resultType="ProductDTO">
-		select * from product
+		select product_no, product_name, product_code, eop 
+		from product 
 	</select>
 	<!-- 품목정보 검색조회(품목코드,품목명,판매상태) -->
 	<select id="searchProduct" parameterType="map" resultType="ProductDTO">
@@ -23,6 +24,12 @@
 	<select id="getProductByProductCode" resultType="ProductDTO">
 		select * from product
 		where product_code=#{productCode}
+	</select>
+	<!-- 선택조회(상세보기,bom 화면출력용) -->
+	<select id="getProductByProductNo" parameterType="int" resultType="ProductDTO">
+		select * 
+		from product
+		where product_no=#{productNo}
 	</select>
 	
 	<!-- 품목추가 -->

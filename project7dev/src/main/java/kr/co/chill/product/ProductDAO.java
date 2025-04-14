@@ -10,6 +10,8 @@ public interface ProductDAO {
 	List<ProductDTO> searchProduct(Map<String, Object> searchMap) throws Exception;
 	//품목코드로 품목조회
 	List<ProductDTO> getProductByProductCode(Map<String, Object> searchMap) throws Exception;
+	//품목번호로 bom조회
+	ProductDTO getProductByProductNo(int productNo) throws Exception;
 	//등록
 	void createProduct(ProductDTO productDTO) throws Exception;
 	//수정

@@ -1,6 +1,7 @@
 package kr.co.chill.quotation;
 
 public class QuotationDTO {
+	private int quotNo;					//견적서고유번호
 	private String quotCode;			//견적서 코드
 	
 	private int supNo;					//거래처정보 불러오는용(회사명, 사업자등록번호)
@@ -20,16 +21,21 @@ public class QuotationDTO {
 	
 	private int quotPrice;				//견적단가
 	private String quotPriceCurrency;	//화폐종류
-	private int quotQuantity;			//수량
-	private String quotUnit;			//단위
+	private int quotMaterialCnt;		//수량
+	private String quotMaterialSku;		//단위
 	private String quotDueDate;			//납기일
 	private String quotEtc;				//기타사항
 	
-	public QuotationDTO(String quotCode, int supNo, String supName, String supRegNo, String quotFile, String quotDterms,
-			String quotPterms, int materialNo, String materialName, String materialCode, String materialRawMaterial,
-			String materialDescription, String materialUnit, int quotPrice, String quotPriceCurrency, int quotQuantity,
-			String quotUnit, String quotDueDate, String quotEtc) {
+	public QuotationDTO() {
 		super();
+	}
+
+	public QuotationDTO(int quotNo, String quotCode, int supNo, String supName, String supRegNo, String quotFile,
+			String quotDterms, String quotPterms, int materialNo, String materialName, String materialCode,
+			String materialRawMaterial, String materialDescription, String materialUnit, int quotPrice,
+			String quotPriceCurrency, int quotMaterialCnt, String quotMaterialSku, String quotDueDate, String quotEtc) {
+		super();
+		this.quotNo = quotNo;
 		this.quotCode = quotCode;
 		this.supNo = supNo;
 		this.supName = supName;
@@ -45,10 +51,18 @@ public class QuotationDTO {
 		this.materialUnit = materialUnit;
 		this.quotPrice = quotPrice;
 		this.quotPriceCurrency = quotPriceCurrency;
-		this.quotQuantity = quotQuantity;
-		this.quotUnit = quotUnit;
+		this.quotMaterialCnt = quotMaterialCnt;
+		this.quotMaterialSku = quotMaterialSku;
 		this.quotDueDate = quotDueDate;
 		this.quotEtc = quotEtc;
+	}
+
+	public int getQuotNo() {
+		return quotNo;
+	}
+
+	public void setQuotNo(int quotNo) {
+		this.quotNo = quotNo;
 	}
 
 	public String getQuotCode() {
@@ -171,20 +185,20 @@ public class QuotationDTO {
 		this.quotPriceCurrency = quotPriceCurrency;
 	}
 
-	public int getQuotQuantity() {
-		return quotQuantity;
+	public int getQuotMaterialCnt() {
+		return quotMaterialCnt;
 	}
 
-	public void setQuotQuantity(int quotQuantity) {
-		this.quotQuantity = quotQuantity;
+	public void setQuotMaterialCnt(int quotMaterialCnt) {
+		this.quotMaterialCnt = quotMaterialCnt;
 	}
 
-	public String getQuotUnit() {
-		return quotUnit;
+	public String getQuotMaterialSku() {
+		return quotMaterialSku;
 	}
 
-	public void setQuotUnit(String quotUnit) {
-		this.quotUnit = quotUnit;
+	public void setQuotMaterialSku(String quotMaterialSku) {
+		this.quotMaterialSku = quotMaterialSku;
 	}
 
 	public String getQuotDueDate() {
@@ -205,13 +219,14 @@ public class QuotationDTO {
 
 	@Override
 	public String toString() {
-		return "QuotationDTO [quotCode=" + quotCode + ", supNo=" + supNo + ", supName=" + supName + ", supRegNo="
-				+ supRegNo + ", quotFile=" + quotFile + ", quotDterms=" + quotDterms + ", quotPterms=" + quotPterms
-				+ ", materialNo=" + materialNo + ", materialName=" + materialName + ", materialCode=" + materialCode
-				+ ", materialRawMaterial=" + materialRawMaterial + ", materialDescription=" + materialDescription
-				+ ", materialUnit=" + materialUnit + ", quotPrice=" + quotPrice + ", quotPriceCurrency="
-				+ quotPriceCurrency + ", quotQuantity=" + quotQuantity + ", quotUnit=" + quotUnit + ", quotDueDate="
-				+ quotDueDate + ", quotEtc=" + quotEtc + "]";
+		return "QuotationDTO [quotNo=" + quotNo + ", quotCode=" + quotCode + ", supNo=" + supNo + ", supName=" + supName
+				+ ", supRegNo=" + supRegNo + ", quotFile=" + quotFile + ", quotDterms=" + quotDterms + ", quotPterms="
+				+ quotPterms + ", materialNo=" + materialNo + ", materialName=" + materialName + ", materialCode="
+				+ materialCode + ", materialRawMaterial=" + materialRawMaterial + ", materialDescription="
+				+ materialDescription + ", materialUnit=" + materialUnit + ", quotPrice=" + quotPrice
+				+ ", quotPriceCurrency=" + quotPriceCurrency + ", quotMaterialCnt=" + quotMaterialCnt
+				+ ", quotMaterialSku=" + quotMaterialSku + ", quotDueDate=" + quotDueDate + ", quotEtc=" + quotEtc
+				+ "]";
 	}
 	
 }

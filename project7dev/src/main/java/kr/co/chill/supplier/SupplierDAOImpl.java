@@ -21,7 +21,7 @@ public class SupplierDAOImpl implements SupplierDAO {
 	}
 	//선택조회(상세보기)
 	@Override
-	public List<SupplierDTO> readSupplierBySupNo(int supNo) throws Exception {
+	public SupplierDTO readSupplierBySupNo(int supNo) throws Exception {
 		// TODO Auto-generated method stub
 		return sqlSession.selectOne("kr.co.chill.supplierMapper.readSupplierBySupNo", supNo);
 	}
@@ -30,6 +30,12 @@ public class SupplierDAOImpl implements SupplierDAO {
 	public List<SupplierDTO> searchSupplier(Map<String, Object> searchMap) throws Exception {
 		// TODO Auto-generated method stub
 		return sqlSession.selectList("kr.co.chill.supplierMapper.searchSupplier", searchMap);
+	}
+	//사업자번호로 거래처 가져오기
+	@Override
+	public List<SupplierDTO> getSupplierBySupRegNo(String supRegNo) throws Exception {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("kr.co.chill.supplierMapper.getSupplierBySupRegNo", supRegNo);
 	}
 	//신규등록
 	@Override

@@ -1,17 +1,18 @@
 package kr.co.chill.material;
 
 public class MaterialDTO {
+	private String materialNo;			//부품고유번호
 	private String materialName;		//부품명
 	private String materialRawMaterial;	//원자재
 	private String materialCode;		//부품코드
 	private String materialDescription;	//규격
 	private String materialUnit;		//단위(mm,ml등)
 	private String materialFile;		//세부제작사항
+	private int materialQuantity;		//소요량
 	
 	private int productNo;				//사용되는 제품 매칭용
 	
 	//이하 내용은 계약 시 작성
-	private int materialQuantity;		//부품수량
 	private String materialSku;			//포장단위
 	private int materialLeadtime;		//리드타임(발주 시 납품까지 걸리는 일수)
 	private int materialMoq;			//최소주문수량
@@ -20,10 +21,16 @@ public class MaterialDTO {
 	
 	private int supNo;					//납품 거래처 확인용
 
-	public MaterialDTO(String materialName, String materialRawMaterial, String materialCode, String materialDescription,
-			String materialUnit, String materialFile, int productNo, int materialQuantity, String materialSku,
-			int materialLeadtime, int materialMoq, int materialSkuQuantity, String materialEtc, int supNo) {
+	public MaterialDTO() {
 		super();
+	}
+
+	public MaterialDTO(String materialNo, String materialName, String materialRawMaterial, String materialCode,
+			String materialDescription, String materialUnit, String materialFile, int productNo, int materialQuantity,
+			String materialSku, int materialLeadtime, int materialMoq, int materialSkuQuantity, String materialEtc,
+			int supNo) {
+		super();
+		this.materialNo = materialNo;
 		this.materialName = materialName;
 		this.materialRawMaterial = materialRawMaterial;
 		this.materialCode = materialCode;
@@ -38,6 +45,14 @@ public class MaterialDTO {
 		this.materialSkuQuantity = materialSkuQuantity;
 		this.materialEtc = materialEtc;
 		this.supNo = supNo;
+	}
+
+	public String getMaterialNo() {
+		return materialNo;
+	}
+
+	public void setMaterialNo(String materialNo) {
+		this.materialNo = materialNo;
 	}
 
 	public String getMaterialName() {
@@ -154,12 +169,12 @@ public class MaterialDTO {
 
 	@Override
 	public String toString() {
-		return "MaterialDTO [materialName=" + materialName + ", materialRawMaterial=" + materialRawMaterial
-				+ ", materialCode=" + materialCode + ", materialDescription=" + materialDescription + ", materialUnit="
-				+ materialUnit + ", materialFile=" + materialFile + ", productNo=" + productNo + ", materialQuantity="
-				+ materialQuantity + ", materialSku=" + materialSku + ", materialLeadtime=" + materialLeadtime
-				+ ", materialMoq=" + materialMoq + ", materialSkuQuantity=" + materialSkuQuantity + ", materialEtc="
-				+ materialEtc + ", supNo=" + supNo + "]";
+		return "MaterialDTO [materialNo=" + materialNo + ", materialName=" + materialName + ", materialRawMaterial="
+				+ materialRawMaterial + ", materialCode=" + materialCode + ", materialDescription="
+				+ materialDescription + ", materialUnit=" + materialUnit + ", materialFile=" + materialFile
+				+ ", productNo=" + productNo + ", materialQuantity=" + materialQuantity + ", materialSku=" + materialSku
+				+ ", materialLeadtime=" + materialLeadtime + ", materialMoq=" + materialMoq + ", materialSkuQuantity="
+				+ materialSkuQuantity + ", materialEtc=" + materialEtc + ", supNo=" + supNo + "]";
 	}
-	
+
 }

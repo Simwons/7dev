@@ -17,13 +17,19 @@
 	<select id="searchSupplier" parameterType="map" resultType="SupplierDTO">
 		select * from supplier 	
 		<where>
-       		<if test="searchType == 'supName' and searchValue != null and searchValue != ''">
+       		<if test="searchType eq 'supName' and searchValue != null and searchValue != ''">
             	AND sup_name LIKE CONCAT('%', #{searchValue}, '%')
         	</if>
-        	<if test="searchType == 'supRegNo' and searchValue != null and searchValue != ''">
+        	<if test="searchType eq 'supRegNo' and searchValue != null and searchValue != ''">
         	    AND sup_reg_no LIKE CONCAT('%', #{searchValue}, '%')
         	</if>
     	</where>
+	</select>
+	<!-- 사업자번호로 거래처 가져오기 -->
+	<select id="getSupplierBySupRegNo" parameterType="String" resultType="SupplierDTO">
+		select *
+		from supplier
+		where sup_reg_no LIKE CONCAT('%', #{supRegNo}, '%')
 	</select>
 	
 	<!-- 거래처 신규등록 -->
@@ -45,7 +51,7 @@
 	
 	<!-- 거래처 삭제 -->
 	<delete id="deleteSupplier" parameterType="int">
-		delete supplier
+		delete from supplier
 		where sup_no=#{supNo}
 	</delete>
 

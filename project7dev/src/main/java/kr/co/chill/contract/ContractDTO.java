@@ -1,6 +1,7 @@
 package kr.co.chill.contract;
 
 public class ContractDTO {
+	private int contNo;			//계약서고유번호
 	private String contCode;	//계약서 코드
 	
 	private int supNo;			//거래처정보 로드용(사명, 사업자등록번호)
@@ -21,7 +22,7 @@ public class ContractDTO {
 	private String materialDescription;	//규격(화면출력용)
 	private String materialUnit;		//단위(화면출력용)
 	
-	private int quotationNo;			//견적정보 로드용(부품단가, 화폐종류, 수량, 포장단위, 인도조건, 지급조건)	
+	private int quotNo;			//견적정보 로드용(부품단가, 화폐종류, 수량, 포장단위, 인도조건, 지급조건)	
 	private int quotPrice;				//부품단가(화면출력용, 수정가능)
 	private String quotPriceCurrency;	//화폐종류(화면출력용, 수정가능)
 	private int quotMaterialCnt;		//수량(화면출력용, 수정가능)
@@ -44,14 +45,19 @@ public class ContractDTO {
 	private int materialSkuQuantity;	//포장단위당 수량
 	private String contFile;			//계약서 파일
 	
-	public ContractDTO(String contCode, int supNo, String supName, String supRegNo, String supCip, String contDate,
-			int contPeriod, int empNo, String empName, int materialNo, String materialName, String materialCode,
-			String materialRawMaterial, String materialDescription, String materialUnit, int quotationNo, int quotPrice,
-			String quotPriceCurrency, int quotMaterialCnt, String quotMaterialSku, String quotDterms, String quotPterms,
-			int mpriceNo, int contMprice, int sellMprice, String mpriceCurrency, int contMaterialCnt,
-			String contMaterialSku, int contLeadtime, String contDterms, String contPterms, int materialMoq,
-			int materialSkuQuantity, String contFile) {
+	public ContractDTO() {
 		super();
+	}
+
+	public ContractDTO(int contNo, String contCode, int supNo, String supName, String supRegNo, String supCip,
+			String contDate, int contPeriod, int empNo, String empName, int materialNo, String materialName,
+			String materialCode, String materialRawMaterial, String materialDescription, String materialUnit,
+			int quotNo, int quotPrice, String quotPriceCurrency, int quotMaterialCnt, String quotMaterialSku,
+			String quotDterms, String quotPterms, int mpriceNo, int contMprice, int sellMprice, String mpriceCurrency,
+			int contMaterialCnt, String contMaterialSku, int contLeadtime, String contDterms, String contPterms,
+			int materialMoq, int materialSkuQuantity, String contFile) {
+		super();
+		this.contNo = contNo;
 		this.contCode = contCode;
 		this.supNo = supNo;
 		this.supName = supName;
@@ -67,7 +73,7 @@ public class ContractDTO {
 		this.materialRawMaterial = materialRawMaterial;
 		this.materialDescription = materialDescription;
 		this.materialUnit = materialUnit;
-		this.quotationNo = quotationNo;
+		this.quotNo = quotNo;
 		this.quotPrice = quotPrice;
 		this.quotPriceCurrency = quotPriceCurrency;
 		this.quotMaterialCnt = quotMaterialCnt;
@@ -86,6 +92,14 @@ public class ContractDTO {
 		this.materialMoq = materialMoq;
 		this.materialSkuQuantity = materialSkuQuantity;
 		this.contFile = contFile;
+	}
+
+	public int getContNo() {
+		return contNo;
+	}
+
+	public void setContNo(int contNo) {
+		this.contNo = contNo;
 	}
 
 	public String getContCode() {
@@ -208,12 +222,12 @@ public class ContractDTO {
 		this.materialUnit = materialUnit;
 	}
 
-	public int getQuotationNo() {
-		return quotationNo;
+	public int getQuotNo() {
+		return quotNo;
 	}
 
-	public void setQuotationNo(int quotationNo) {
-		this.quotationNo = quotationNo;
+	public void setQuotNo(int quotNo) {
+		this.quotNo = quotNo;
 	}
 
 	public int getQuotPrice() {
@@ -362,18 +376,19 @@ public class ContractDTO {
 
 	@Override
 	public String toString() {
-		return "ContractDTO [contCode=" + contCode + ", supNo=" + supNo + ", supName=" + supName + ", supRegNo="
-				+ supRegNo + ", supCip=" + supCip + ", contDate=" + contDate + ", contPeriod=" + contPeriod + ", empNo="
-				+ empNo + ", empName=" + empName + ", materialNo=" + materialNo + ", materialName=" + materialName
-				+ ", materialCode=" + materialCode + ", materialRawMaterial=" + materialRawMaterial
-				+ ", materialDescription=" + materialDescription + ", materialUnit=" + materialUnit + ", quotationNo="
-				+ quotationNo + ", quotPrice=" + quotPrice + ", quotPriceCurrency=" + quotPriceCurrency
-				+ ", quotMaterialCnt=" + quotMaterialCnt + ", quotMaterialSku=" + quotMaterialSku + ", quotDterms="
-				+ quotDterms + ", quotPterms=" + quotPterms + ", mpriceNo=" + mpriceNo + ", contMprice=" + contMprice
-				+ ", sellMprice=" + sellMprice + ", mpriceCurrency=" + mpriceCurrency + ", contMaterialCnt="
-				+ contMaterialCnt + ", contMaterialSku=" + contMaterialSku + ", contLeadtime=" + contLeadtime
-				+ ", contDterms=" + contDterms + ", contPterms=" + contPterms + ", materialMoq=" + materialMoq
-				+ ", materialSkuQuantity=" + materialSkuQuantity + ", contFile=" + contFile + "]";
+		return "ContractDTO [contNo=" + contNo + ", contCode=" + contCode + ", supNo=" + supNo + ", supName=" + supName
+				+ ", supRegNo=" + supRegNo + ", supCip=" + supCip + ", contDate=" + contDate + ", contPeriod="
+				+ contPeriod + ", empNo=" + empNo + ", empName=" + empName + ", materialNo=" + materialNo
+				+ ", materialName=" + materialName + ", materialCode=" + materialCode + ", materialRawMaterial="
+				+ materialRawMaterial + ", materialDescription=" + materialDescription + ", materialUnit="
+				+ materialUnit + ", quotNo=" + quotNo + ", quotPrice=" + quotPrice + ", quotPriceCurrency="
+				+ quotPriceCurrency + ", quotMaterialCnt=" + quotMaterialCnt + ", quotMaterialSku=" + quotMaterialSku
+				+ ", quotDterms=" + quotDterms + ", quotPterms=" + quotPterms + ", mpriceNo=" + mpriceNo
+				+ ", contMprice=" + contMprice + ", sellMprice=" + sellMprice + ", mpriceCurrency=" + mpriceCurrency
+				+ ", contMaterialCnt=" + contMaterialCnt + ", contMaterialSku=" + contMaterialSku + ", contLeadtime="
+				+ contLeadtime + ", contDterms=" + contDterms + ", contPterms=" + contPterms + ", materialMoq="
+				+ materialMoq + ", materialSkuQuantity=" + materialSkuQuantity + ", contFile=" + contFile + "]";
 	}
+
 	
 }

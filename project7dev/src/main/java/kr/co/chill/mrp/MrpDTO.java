@@ -1,6 +1,8 @@
 package kr.co.chill.mrp;
 
 public class MrpDTO {
+	private int mrpNO;				//자재소요계획고유번호
+	
 	private int productNo;			//제품정보 로드용(제품명, 제품코드)
 	private String productName;		//제품명
 	private String productCode;		//제품코드
@@ -29,12 +31,17 @@ public class MrpDTO {
 	
 	private String mrpEtc;				//기타사항
 
-	public MrpDTO(int productNo, String productName, String productCode, String mrpDueDate,
-			int mstorageNo, String mstorageCode, int mstorageStock, int materialNo, String materialName,
-			String materialCode, String materialRawMaterial, String materialDescription, String materialUnit,
-			int mrpQuantity, String mrpUnit, int mrpLeadtime, int empNo, String empName, String empPhone,
-			String empEmail, String mrpEtc) {
+	public MrpDTO() {
 		super();
+	}
+
+	public MrpDTO(int mrpNO, int productNo, String productName, String productCode, String mrpDueDate, int mstorageNo,
+			String mstorageCode, int mstorageStock, int materialNo, String materialName, String materialCode,
+			String materialRawMaterial, String materialDescription, String materialUnit, int mrpQuantity,
+			String mrpUnit, int mrpLeadtime, int empNo, String empName, String empPhone, String empEmail,
+			String mrpEtc) {
+		super();
+		this.mrpNO = mrpNO;
 		this.productNo = productNo;
 		this.productName = productName;
 		this.productCode = productCode;
@@ -56,6 +63,14 @@ public class MrpDTO {
 		this.empPhone = empPhone;
 		this.empEmail = empEmail;
 		this.mrpEtc = mrpEtc;
+	}
+
+	public int getMrpNO() {
+		return mrpNO;
+	}
+
+	public void setMrpNO(int mrpNO) {
+		this.mrpNO = mrpNO;
 	}
 
 	public int getProductNo() {
@@ -228,7 +243,7 @@ public class MrpDTO {
 
 	@Override
 	public String toString() {
-		return "MaterialResourcePlanDTO [productNo=" + productNo + ", productName=" + productName + ", productCode="
+		return "MrpDTO [mrpNO=" + mrpNO + ", productNo=" + productNo + ", productName=" + productName + ", productCode="
 				+ productCode + ", mrpDueDate=" + mrpDueDate + ", mstorageNo=" + mstorageNo + ", mstorageCode="
 				+ mstorageCode + ", mstorageStock=" + mstorageStock + ", materialNo=" + materialNo + ", materialName="
 				+ materialName + ", materialCode=" + materialCode + ", materialRawMaterial=" + materialRawMaterial
@@ -237,5 +252,5 @@ public class MrpDTO {
 				+ ", empName=" + empName + ", empPhone=" + empPhone + ", empEmail=" + empEmail + ", mrpEtc=" + mrpEtc
 				+ "]";
 	}
-	
+
 }

@@ -3,7 +3,10 @@
   PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-  <typeAliases>
+	<settings>
+	    <setting name="mapUnderscoreToCamelCase" value="true"/>
+	</settings>
+  	<typeAliases>
 		<typeAlias alias="ProductDTO" type="kr.co.chill.product.ProductDTO"/>
 		<typeAlias alias="MaterialDTO" type="kr.co.chill.material.MaterialDTO"/>
 		<typeAlias alias="SupplierDTO" type="kr.co.chill.supplier.SupplierDTO"/>
@@ -13,4 +16,5 @@
 		<typeAlias alias="MrpDTO" type="kr.co.chill.mrp.MrpDTO"/>
 		<typeAlias alias="ProcurementDTO" type="kr.co.chill.procurement.ProcurementDTO"/>
 	</typeAliases>
+	
 </configuration>

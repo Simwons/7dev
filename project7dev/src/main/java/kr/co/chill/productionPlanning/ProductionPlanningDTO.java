@@ -1,6 +1,8 @@
 package kr.co.chill.productionPlanning;
 
 public class ProductionPlanningDTO {
+	private int prplNo;				//제품생산계획고유번호
+	
 	private int productNo;			//제품정보 로드용(제품명, 제품코드)
 	private String productName;		//제품명(화면출력용)
 	private String productCode;		//제품코드(화면 입/출력용)
@@ -22,10 +24,15 @@ public class ProductionPlanningDTO {
 	
 	private String prplEtc;			//기타사항
 
-	public ProductionPlanningDTO(int productNo, String productName, String productCode, String prplPlant,
+	public ProductionPlanningDTO() {
+		super();
+	}
+
+	public ProductionPlanningDTO(int prplNo, int productNo, String productName, String productCode, String prplPlant,
 			String prplLine, int pstorageNo, int pstorageStock, int productCnt, String prplDueDate, int prplLeadtime,
 			int empNo, String empName, String empPhone, String empEmail, String prplEtc) {
 		super();
+		this.prplNo = prplNo;
 		this.productNo = productNo;
 		this.productName = productName;
 		this.productCode = productCode;
@@ -41,6 +48,14 @@ public class ProductionPlanningDTO {
 		this.empPhone = empPhone;
 		this.empEmail = empEmail;
 		this.prplEtc = prplEtc;
+	}
+
+	public int getPrplNo() {
+		return prplNo;
+	}
+
+	public void setPrplNo(int prplNo) {
+		this.prplNo = prplNo;
 	}
 
 	public int getProductNo() {
@@ -165,11 +180,12 @@ public class ProductionPlanningDTO {
 
 	@Override
 	public String toString() {
-		return "ProductionPlanningDTO [productNo=" + productNo + ", productName=" + productName + ", productCode="
-				+ productCode + ", prplPlant=" + prplPlant + ", prplLine=" + prplLine + ", pstorageNo=" + pstorageNo
-				+ ", pstorageStock=" + pstorageStock + ", productCnt=" + productCnt + ", prplDueDate=" + prplDueDate
-				+ ", prplLeadtime=" + prplLeadtime + ", empNo=" + empNo + ", empName=" + empName + ", empPhone="
-				+ empPhone + ", empEmail=" + empEmail + ", prplEtc=" + prplEtc + "]";
+		return "ProductionPlanningDTO [prplNo=" + prplNo + ", productNo=" + productNo + ", productName=" + productName
+				+ ", productCode=" + productCode + ", prplPlant=" + prplPlant + ", prplLine=" + prplLine
+				+ ", pstorageNo=" + pstorageNo + ", pstorageStock=" + pstorageStock + ", productCnt=" + productCnt
+				+ ", prplDueDate=" + prplDueDate + ", prplLeadtime=" + prplLeadtime + ", empNo=" + empNo + ", empName="
+				+ empName + ", empPhone=" + empPhone + ", empEmail=" + empEmail + ", prplEtc=" + prplEtc + "]";
 	}
+
 
 }

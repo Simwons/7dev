@@ -18,5 +18,7 @@ public interface QuotationDAO {
 	void updateQuotState(Map<String, Object> updateMap) throws Exception;
 	//삭제
 	void deleteQuotation(int quotNo) throws Exception;
+	//오늘견적 갯수 세기
+	int countQuotationToday(String todayDate) throws Exception;
 	
 }

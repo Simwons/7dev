@@ -43,5 +43,11 @@ public class ContractDAOImpl implements ContractDAO {
 		// TODO Auto-generated method stub
 		sqlSession.insert("kr.co.chill.contractMapper.createMprice", contractDTO);
 	}
+	//오늘날짜인 계약 갯수 세기
+	@Override
+	public int countContractToday(String todayDate) throws Exception {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne("kr.co.chill.contractMapper.countContractsToday", todayDate);
+	}
 	
 }
