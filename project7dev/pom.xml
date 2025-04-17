@@ -205,6 +205,14 @@
 		    
 		    
 >>>>>>> branch 'main' of https://github.com/Simwons/7dev.git
+
+
+				<!-- 아래는 아직 push안됨 -->
+		<dependency>
+		    <groupId>commons-fileupload</groupId>
+		    <artifactId>commons-fileupload</artifactId>
+		    <version>1.4</version>
+		</dependency>
 	</dependencies>
     <build>
         <plugins>
