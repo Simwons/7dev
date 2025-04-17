@@ -101,7 +101,7 @@
 			     
 			      <tr>
 			      	<td class="label-cell" style="width:15%;">계약서</td>
-			      	<td style="width:35%;"> <a href="${contextPath}/resources/file/${contract.contFile}" target="_blank">${contract.contFile}</a></td>
+			      	<td style="width:35%;"><a href="${contextPath}/resources/file/${contract.contFile}" target="_blank">${contract.contFile}</a></td>
 			      </tr>
 			    </tbody>
 			  </table>

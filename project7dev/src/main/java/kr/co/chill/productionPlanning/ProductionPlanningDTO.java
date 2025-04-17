@@ -13,7 +13,7 @@ public class ProductionPlanningDTO {
 	private int pstorageNo;			//제품창고 로드용(창고재고수량)
 	private int pstorageStock;		//창고재고수량(화면출력/연산용)
 	
-	private int productCnt;			//출고계획수량(사용자가 입력하는 값)
+	private int productCnt;			//출고계획수량(사용자가 입력하는 값 - 재고량)
 	private String prplDueDate;		//제품납기일(이날까지 완성되어 출고되어야함)
 	private int prplLeadtime;		//제품 리드타임
 	

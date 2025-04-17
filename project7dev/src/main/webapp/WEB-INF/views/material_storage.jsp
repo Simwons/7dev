@@ -19,12 +19,14 @@
     <option value="MW002" <c:if test="${mstorage_code eq 'MW002'}">selected</c:if>>MW002</option>
     <option value="MW003" <c:if test="${mstorage_code eq 'MW003'}">selected</c:if>>MW003</option>
 	</select>
-	자재코드 : 
-	<input type="text" value="M">
-	<select name="material_code" required>
-	<option value=""></option>
-	</select>
-	입고날짜 : <input type="date" name="material_in_date">
+	
+	자재코드 : <input type="text" name="material_code" value="${param.material_code}">
+	
+	입고날짜 : 	
+	<input type="date" name="start_date" value="${param.start_date}">
+	~
+	<input type="date" name="end_date" value="${param.end_date}">
+	
 	<button type="submit">검색</button>
 	</form>
 	
@@ -56,9 +58,8 @@
 		<td>${incoming.mstorage_code}</td>
 		<td>${incoming.emp_name}</td>
 		<td>${incoming.sup_name}</td>
-		<td>${incoming.product_product_no}</td>
+		<td>${incoming.product_no}</td>
 		<td>${incoming.material_in_date}</td>
-		<td>${incoming.material_etc}</td>
 	</tr>
 	</c:forEach>
 	</tbody>

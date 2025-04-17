@@ -63,8 +63,8 @@
 				        <th colspan="7">
 				        	<form action="${contextPath}/quotation/quotation_main" method="get">
 									<select name="searchType" id="selectField">
-							            <option value="materialCode" selected>부품코드</option>
-							            <option value="quotCode">견적코드</option>
+							            <option value="quotCode" selected>견적코드</option>
+							            <option value="materialCode">부품코드</option>
 							            <option value="supName">거래처명</option>
 							        </select>
 								  <input type="text" name="searchValue" id="inputCode">
@@ -101,9 +101,6 @@
 			             	    <form action="${contextPath}/quotation/selectQuotation" method="get">
 			                        <input type="hidden" name="quotNo" value="${quotation.quotNo}" />
 			                        <button type="submit">보기</button>
-									<script>
-									    console.log("${quotation.quotNo}");  // JSP에서 quotNo 값 확인
-									</script>			                        
 			                    </form>
 							</td>
 						</tr>

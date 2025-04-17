@@ -2,26 +2,45 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="kr.co.chill.mrpMapper">
+<mapper namespace="kr.co.chill.procurementMapper">
 	<!-- 부품조달계획 불러오기(전체) -->
 	<select id="readMpp" resultType="ProcurementDTO">
-		select material_procurement_plan.*, product.product_name, product.product_code, material.material_code, material.material_name,
-		material_resource_plan.mstorage_no, material_storage.mstorage_code, material_storage.mstorage_stock, material_resource_plan.mrp_leadtime
+		select material_procurement_plan.*, product.product_name, product.product_code, production_planning.product_cnt, material.material_code, 
+		material.material_name, material_resource_plan.mstorage_no, material_storage.mstorage_code, material_storage.mstorage_stock, material_resource_plan.mrp_leadtime
 		from material_procurement_plan
-		join product on material_procurement_plan.product_no = product.product_no
-		join material on material_procurement_plan.material_no = material.material_no
+		join production_planning on material_procurement_plan.prpl_no = production_planning.prpl_no
+		join product on production_planning.product_no = product.product_no
 		join material_resource_plan on material_procurement_plan.mrp_no = material_resource_plan.mrp_no
+		join material on material_resource_plan.material_no = material.material_no
 		join material_storage on material_resource_plan.mstorage_no = material_storage.mstorage_no
 	</select>
 	<!-- 부품조달계획 상세보기(선택) -->
 	<select id="readMppByMppNo" resultType="ProcurementDTO">
-		select material_procurement_plan.*, product.product_name, product.product_code, material.material_code, material.material_name,
-		material_resource_plan.mstorage_no, material_storage.mstorage_code, material_storage.mstorage_stock, material_resource_plan.mrp_leadtime
+		select material_procurement_plan.*, 
+		product.product_name, product.product_code, 
+		production_planning.product_cnt, 
+		
+		material.material_code, 
+		material.material_name,
+		
+		material_storage.mstorage_code, 
+		material_storage.mstorage_stock, 
+		
+		material_resource_plan.mstorage_no, 
+		material_resource_plan.mrp_leadtime, 
+		material_resource_plan.mrp_due_date,
+		
+		employee.emp_name,
+		employee.emp_phone,
+		employee.emp_email
+		
 		from material_procurement_plan
-		join product on material_procurement_plan.product_no = product.product_no
-		join material on material_procurement_plan.material_no = material.material_no
+		join production_planning on material_procurement_plan.prpl_no = production_planning.prpl_no
+		join product on production_planning.product_no = product.product_no
 		join material_resource_plan on material_procurement_plan.mrp_no = material_resource_plan.mrp_no
+		join material on material_resource_plan.material_no = material.material_no
 		join material_storage on material_resource_plan.mstorage_no = material_storage.mstorage_no
+		JOIN employee ON material_procurement_plan.emp_no = employee.emp_no
 		where mpp_no=#{mppNo}
 	</select>
 	
@@ -38,5 +57,32 @@
 		mrp_no=#{mrpNo}, emp_no=#{empNO}, mpp_etc=#{mppEtc}
 		where mpp_no=#{mppNO}
 	</update>
+	<!-- 오늘 날짜인 mpp 세기 -->
+	<select id="countMppToday" resultType="int">
+    	SELECT COUNT(*) FROM material_procurement_plan
+    	WHERE DATE_FORMAT('now()', '%Y%m%d') = #{todayDate}
+	</select>
+	<!-- 해당 조달계획의 차수 세기 -->
+	<select id="countMppVer" parameterType="String" resultType="int">
+    	SELECT COUNT(*) FROM material_procurement_plan
+    	WHERE mpp_code = #{mppCode}
+	</select>
+	<!-- 제품번호로 가장 최신의 제품생산계획 불러오기 -->
+	<select id="getPrplNoByProductNo" parameterType="int" resultType="int">
+	    SELECT prpl_no FROM production_planning
+	    WHERE product_no = #{productNo}
+	    ORDER BY prpl_no DESC
+	    LIMIT 1
+	</select>
+	
+	<!-- 직원번호로 우리회사 불러오는용 -->
+	<select id="getCompanyByEmpNo" parameterType="int" resultType="kr.co.chill.procurement.CompanyDTO">
+		select company.*
+		from employee
+		join company on employee.comp_no = company.comp_no
+		WHERE emp_no = #{empNo}
+	</select>
+
+	
 	
 </mapper>

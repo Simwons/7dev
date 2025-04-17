@@ -18,12 +18,18 @@
 </head>
 <body>
 <br><br><br>
-	    <form action="#" method="get">
+	    <form action="${contextPath}/quotation/getUpdateQuotation" method="get">
+	 		  <input type="hidden" name="quotNo" value="${quotation.quotNo}" />
 			  <table border="1" cellpadding="5" cellspacing="0" style="width:100%; table-layout: fixed; border-collapse: collapse; text-align:center;">
 			    <tbody>
 			      <tr>
 			        <td class="label-cell" style="width:15%;">견적코드</td>
 			        <td style="width:35%;">${quotation.quotCode}</td>
+			        <td class="label-cell" style="width:15%;">계약확정여부</td>
+			        <td style="width:35%;">
+			        	<c:if test="${quotation.quotState == '0'}">미확정</c:if>
+			        	<c:if test="${quotation.quotState == '1'}">확정</c:if>
+			        </td>
 			      </tr>
    			      <tr>
 			      	<td colspan="4"></td>
@@ -39,7 +45,7 @@
 			      </tr>
 			      <tr>
 			        <td class="label-cell" style="width:15%;">견적서</td>
-			        <td style="width:35%;">${quotation.quotFile}</td>
+			        <td style="width:35%;"><a href="${contextPath}/resources/file/${quotation.quotFile}" target="_blank">${quotation.quotFile}</a></td>
 			        <td class="label-cell" style="width:15%;">인도조건</td>
 			        <td style="width:35%;">${quotation.quotDterms} </td>
 			      </tr>
@@ -96,23 +102,6 @@
       			<button type="button" onclick="history.back()">닫기</button>
 	      	  </div>
 	    </form>
-		<div id="supplierModal" style="display: none; position: fixed; top:20%; left:30%; background: white; border: 1px solid #ccc; padding: 20px;">
-		  <h3>조회 결과</h3>
-		  <table id="supplierTable" border="1">
-		    <thead>
-		      <tr>
-		      	<th>사업자등록번호</th>
-		      	<th>회사명</th>
-		      	<th>선택</th>
-	      	  </tr>
-		    </thead>
-		    <tbody>
-		    
-		    </tbody>
-		  </table>
-		  <button onclick="closeSupplierModal()">닫기</button>
-		</div>
-	    
 	    
 		<script>
 		function toggleDaysInput(enabled) {
@@ -138,8 +127,6 @@
 
 		    document.getElementById('quotPterms').value = method + ", " + timing;
 		});
-		
-	
 
 		</script>
 </body>

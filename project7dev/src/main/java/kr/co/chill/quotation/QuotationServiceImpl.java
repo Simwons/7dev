@@ -53,9 +53,9 @@ public class QuotationServiceImpl implements QuotationService {
 	}
 	//견적확정시
 	@Override
-	public void updateQuotState(Map<String, Object> updateMap) throws Exception {
+	public void updateQuotState(int quotNo) throws Exception {
 		// TODO Auto-generated method stub
-		quotationDAO.updateQuotState(updateMap);
+		quotationDAO.updateQuotState(quotNo);
 	}
 	//삭제
 	@Override

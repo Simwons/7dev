@@ -1,5 +1,7 @@
 package kr.co.chill.procurement;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -35,5 +37,31 @@ public class ProcurementServiceImpl implements ProcurementService {
 		// TODO Auto-generated method stub
 		procurementDAO.updateMpp(procurementDTO);
 	}
-	
+	//조달계획코드생성
+	public String generateNewMppCode() throws Exception {
+	    String prefix = "MP";
+	    String datePart = new SimpleDateFormat("yyyyMMdd").format(new Date());
+	    int sequence = procurementDAO.countMppToday(datePart)+1;
+
+	    return prefix + datePart + String.format("%02d", sequence);
+	}
+	//조달계획차수
+	@Override
+	public int countMppVer(String mppCode) throws Exception {
+		// TODO Auto-generated method stub
+		int mppVer = procurementDAO.countMppVer(mppCode)+1;
+		return mppVer;
+	}
+	//제품번호로 가장 최신의 제품생산계획 불러오기
+	@Override
+	public int getPrplNoByProductNo(int productNo) throws Exception {
+		// TODO Auto-generated method stub
+		return procurementDAO.getPrplNoByProductNo(productNo);
+	}
+	//우리회사
+	@Override
+	public CompanyDTO getCompanyByEmpNo(int empNo) throws Exception {
+		// TODO Auto-generated method stub
+		return procurementDAO.getCompanyByEmpNo(empNo);
+	}
 }

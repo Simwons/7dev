@@ -7,12 +7,14 @@
 	<name>project7dev</name>
 	<packaging>war</packaging>
 	<version>1.0.0-BUILD-SNAPSHOT</version>
+	
 	<properties>
 		<java-version>1.6</java-version>
 		<org.springframework-version>5.2.6.RELEASE</org.springframework-version>
 		<org.aspectj-version>1.8.9</org.aspectj-version>
-		<org.slf4j-version>1.6.6</org.slf4j-version>
+		<org.slf4j-version>1.7.30</org.slf4j-version> <!-- 1.6.6 => 1.7.30 -->
 	</properties>
+	
 	<dependencies>
 		<!-- Spring -->
 		<dependency>
@@ -172,6 +174,7 @@
 		    <artifactId>poi-ooxml</artifactId>
 		    <version>5.2.3</version>
 		</dependency>
+<<<<<<< HEAD
 		<dependency>
 		    <groupId>com.fasterxml.jackson.core</groupId>
 		    <artifactId>jackson-databind</artifactId>
@@ -182,6 +185,26 @@
 		    <artifactId>commons-fileupload</artifactId>
 		    <version>1.4</version>
 		</dependency>		
+=======
+		
+		<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+		<dependency>
+		    <groupId>org.projectlombok</groupId>
+		    <artifactId>lombok</artifactId>
+		    <version>1.18.24</version>
+		    <scope>provided</scope>
+		</dependency>
+						    
+		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+		<dependency>
+	        <groupId>com.fasterxml.jackson.core</groupId>
+	        <artifactId>jackson-databind</artifactId>
+	        <version>2.15.3</version>
+  		</dependency>    
+				    
+		    
+		    
+>>>>>>> branch 'main' of https://github.com/Simwons/7dev.git
 	</dependencies>
     <build>
         <plugins>

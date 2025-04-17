@@ -45,9 +45,9 @@ public class QuotationDAOImpl implements QuotationDAO {
 	}
 	//견적확정시
 	@Override
-	public void updateQuotState(Map<String, Object> updateMap) throws Exception {
+	public void updateQuotState(int quotNo) throws Exception {
 		// TODO Auto-generated method stub
-		sqlSession.update("kr.co.chill.quotationMapper.updateQuotState", updateMap);
+		sqlSession.update("kr.co.chill.quotationMapper.updateQuotState", quotNo);
 	}
 	//삭제
 	@Override

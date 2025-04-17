@@ -32,6 +32,7 @@
        		<if test="searchType == 'contCode' and searchValue != null and searchValue != ''">
             	AND cont_code LIKE CONCAT('%', #{searchValue}, '%')
         	</if>
+        	
     	</where>
 	</select>	
 	<!-- 오늘 날짜인 견적 갯수 세기 -->

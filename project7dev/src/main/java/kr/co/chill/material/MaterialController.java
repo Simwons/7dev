@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +24,8 @@ public class MaterialController {
 	@GetMapping("material/material_main")
 	public String materialMain(@RequestParam(value = "searchType", required = false)String searchType
 			, @RequestParam(value = "searchValue", required = false)String searchValue
+			, HttpSession session
+			, HttpServletRequest request
 			, Model model) throws Exception {
 		List<MaterialDTO> materialList;
 		
@@ -42,6 +46,8 @@ public class MaterialController {
 	//자재검색(자재코드)
 	@GetMapping("material/searchMaterial")
 	public String searchMaterial(@RequestParam(value = "searchValue", required = false)String searchValue
+			, HttpSession session
+			, HttpServletRequest request
 			, Model model) throws Exception {
 		List<MaterialDTO> materialList;
 		
@@ -57,11 +63,14 @@ public class MaterialController {
 	}
 	//자재추가
 	@PostMapping("material/createMaterial")
-	public String createMaterial(@ModelAttribute("Material")MaterialDTO materialDTO) throws Exception {
+	public String createMaterial(@ModelAttribute("Material")MaterialDTO materialDTO
+			, HttpSession session
+			, HttpServletRequest request) throws Exception {
 		materialService.createMaterial(materialDTO);
 		
 		return "redirect:/product/product_bom?productNo="+materialDTO.getProductNo();
 	}
+	
 	
 	
 }

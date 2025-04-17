@@ -5,9 +5,10 @@
 <mapper namespace="kr.co.chill.productionPlanningMapper">
 	<!-- 제품생산계획 불러오기(전체) -->
 	<select id="readProductionPlanning" resultType="ProductionPlanningDTO">
-		select production_planning.*, product.product_code, product.product_name
+		select production_planning.*, product.product_code, product.product_name, employee.emp_name
 		from production_planning
 		join product on production_planning.product_no = product.product_no
+		join employee on production_planning.emp_no = employee.emp_no
 	</select>
 	<!-- 제품생산계획 상세보기(선택) -->
 	<select id="readProductionPlanningByPrplNo" resultType="ProductionPlanningDTO">

@@ -7,78 +7,201 @@
 	<!-- 자재창고별 자재목록 조회 -->
 	<select id="selectAll" parameterType="kr.co.chill.incoming.IncomingDTO" resultType="kr.co.chill.incoming.IncomingDTO">
 		SELECT 
-		material.material_name,       
-		material.material_code,       
-		material.material_raw_material, 
-		material.material_description,        
-		material.material_unit,       
-		material_storage.mstorage_stock,     
-		material_storage.mstorage_code,      
-		employee.emp_name AS 담당자명,         
-		supplier.sup_name AS 공급업체명,       
-		material.product_product_no,         
-		material_in.material_in_date,        
-		material.material_etc              
-		FROM material_storage 
-		JOIN material 
-		ON material_storage.material_material_no = material.material_no   
-		LEFT JOIN material_in 
-		ON material.material_no = material_in.material_material_no
-		LEFT JOIN employee 
-		ON material_storage.emp_emp_no = employee.emp_no  
+		m.material_no,
+		m.material_name,       
+		m.material_code,       
+		m.material_raw_material, 
+		m.material_description,        
+		m.material_unit,       
+		ms.mstorage_stock,     
+		ms.mstorage_code, 
+		ms.mstorage_no,     
+		emp.emp_name,   
+		emp.emp_no,    
+		ms.sup_no,  
+		supplier.sup_name, 
+		m.product_no,         
+		mi.material_in_date, 
+		mi.state,
+		mi.material_in_no,  
+		m.material_etc   
+		           
+		FROM material_storage ms
+		JOIN material m
+		ON ms.material_no = m.material_no
+		
+		LEFT JOIN (
+		    SELECT *
+		    FROM material_in mi1
+		    WHERE mi1.material_in_no = (
+		        SELECT MIN(mi2.material_in_no)
+		        FROM material_in mi2
+		        WHERE mi2.material_no = mi1.material_no
+		        AND mi2.state = 1
+		    )
+		) mi ON m.material_no = mi.material_no
+		
+		LEFT JOIN employee emp
+		ON ms.emp_no = emp.emp_no  
 		LEFT JOIN supplier 
-		ON material_storage.supplier_sup_no = supplier.sup_no  
+		ON ms.sup_no = supplier.sup_no  
 		<where>
 		<!-- 창고코드는 필수 조건 -->
-		material_storage.mstorage_code = #{mstorage_code}
+		ms.mstorage_code = #{mstorage_code}
 	
 		<!-- 자재코드가 있을 때만 조건 추가 -->
 		<if test="material_code != null and material_code != ''">
-			AND material.material_code = #{material_code}
+			AND m.material_code = #{material_code}
 		</if>
 		
 		<!-- 입고날짜가 있을 때만 조건 추가 -->
 		<if test="material_in_date != null and material_in_date != ''">
-			AND material_in.material_in_date = #{material_in_date}
+			AND mi.material_in_date BETWEEN #{start_date} AND #{end_date}
 		</if>
 		
 		<!-- 자재 상태가 1(정상)인 것만 조회-->
-		AND material_in.state = 1
+		AND ms.mstorage_code IS NOT NULL
+		
+		<!-- 자재수량이 0 이상여야 조회 -->
+		AND ms.mstorage_stock > 0 
 	</where>
-		ORDER BY material_storage.mstorage_code, material.material_name
+		ORDER BY ms.mstorage_code, m.material_name
 	</select>		
   		
   		
   	<!-- 창고에 입고예정인 자재목록조회 -->	
   	 <select id="selectExp" parameterType="kr.co.chill.incoming.IncomingDTO" resultType="kr.co.chill.incoming.IncomingDTO">
-		SELECT 
-	mi.material_material_no,	
-    m.material_name, 
-    m.material_code, 
-    m.material_raw_material, 
-    m.material_description, 
-    m.material_unit, 
-    mi.material_in_cnt, 
-    s.sup_name,     
-    mi.material_in_date
-	FROM material_in mi
-	JOIN material m ON mi.material_material_no = m.material_no
-	JOIN material_storage ms ON mi.material_storage_mstorage_no = ms.mstorage_no
-	left join supplier s ON ms.supplier_sup_no = s.sup_no
-	WHERE mi.state = 0
-	ORDER BY mi.material_in_date DESC;
+			SELECT 
+		mi.material_no,	
+	    m.material_name, 
+	    m.material_code, 
+	    m.material_raw_material, 
+	    m.material_description, 
+	    m.material_unit, 
+	    mi.material_in_cnt, 
+	    mi.material_in_no,
+	    mi.material_in_date,
+	    s.sup_name,     
+	    mi.mstorage_in_date,
+	    mi.state,
+		tp.purc_order_no,
+        po.purc_order_code,
+        po.purc_order_reg_date,
+        po.purc_order_status
+		FROM material_in mi
+		JOIN material m ON mi.material_no = m.material_no
+		JOIN material_storage ms ON mi.mstorage_no = ms.mstorage_no
+		LEFT JOIN supplier s ON ms.sup_no = s.sup_no
+		LEFT JOIN trans_paper tp ON mi.material_no = tp.material_no
+    	LEFT JOIN purchase_order po ON tp.purc_order_no = po.purc_order_no
+		<where>
+		<!-- 자재 상태에 따라 조회-->
+		
+			mi.state = #{state}
+		
+		<!-- 자재코드가 있을 때만 조건 추가 -->
+		<if test="material_code != null and material_code != ''">
+			AND m.material_code = #{material_code}
+		</if>
+		
+		<!-- 입고날짜가 있을 때만 조건 추가 -->
+		<if test="material_in_date != null and material_in_date != ''">
+			AND mi.mstorage_in_date BETWEEN #{start_date} AND #{end_date}
+		</if>
+				
+		</where>
+		ORDER BY mi.mstorage_in_date DESC;
 	
 	</select>	
 	
-	<!-- 창고로 자재 등록 state 값을 0->1로 수정 -->
-	<update id="materialIn">
-		update material_in
-		set state = #{state}
-		where state = 0
-		and material_material_no = #{material_material_no}
-	</update>
-
-	<!-- 자재반품 -->
 	
+		<!-- 창고 존재 여부 확인 -->
+	<select id="checkMaterialInStorage" resultType="int">
+		  SELECT COUNT(*) 
+		  FROM material_storage 
+		  WHERE material_no = #{material_no}
+		  AND mstorage_code = #{mstorage_code}
+	</select>
+	
+	<!-- 창고 insert -->
+	<insert id="insertMaterialStorage">
+	 	 INSERT INTO material_storage (mstorage_no, mstorage_stock, mstorage_code, material_no, sup_no, emp_no, mstorage_plant_code)
+	 	 VALUES (#{mstorage_no}, #{material_in_cnt}, #{mstorage_code}, #{material_no}, #{sup_no}, #{emp_no}, #{mstorage_plant_code})
+	</insert>
+	
+	<!-- 창고 update -->
+	<update id="updateMaterialStorage">
+		  UPDATE material_storage 
+		  SET mstorage_stock = mstorage_stock + #{material_in_cnt}
+		  WHERE material_no = #{material_no}
+		  AND mstorage_code = #{mstorage_code}
+	</update>
+	
+	<!-- 자재 상태 update -->
+	<update id="updateMaterialState">
+		  UPDATE material_in
+		  SET state = 1 , material_in_date = now()
+		  WHERE material_in_no = #{material_in_no} AND state = 0
+	</update>
+	
+	
+	  	<!-- 창고에 입고예정인 자재목록조회 -->	
+  	 <select id="searchMaterials" parameterType="map" resultType="kr.co.chill.incoming.IncomingDTO">
+			SELECT 
+		mi.material_no,	
+	    m.material_name, 
+	    m.material_code, 
+	    m.material_raw_material, 
+	    m.material_description, 
+	    m.material_unit, 
+	    mi.material_in_cnt, 
+	    mi.material_in_no,
+	    s.sup_name,     
+	    mi.mstorage_in_date,
+	    mi.state,
+	    tp.purc_order_no,
+        po.purc_order_code,
+        po.purc_order_reg_date,
+        po.purc_order_status
+		FROM material_in mi
+		JOIN material m ON mi.material_no = m.material_no
+		JOIN material_storage ms ON mi.mstorage_no = ms.mstorage_no
+		LEFT JOIN supplier s ON ms.sup_no = s.sup_no
+		LEFT JOIN trans_paper tp ON mi.material_no = tp.material_no
+    	LEFT JOIN purchase_order po ON tp.purc_order_no = po.purc_order_no
+		   <where>
+        <if test="order_code != null and order_code != ''">
+            AND po.purc_order_code LIKE CONCAT('%', #{order_code}, '%')
+        </if>
+        <if test="state != null">
+            AND mi.state = #{state}
+        </if>
+        <if test="purc_order_status != null">
+            AND po.purc_order_status = #{purc_order_status}
+        </if>
+        <if test="mstorage_in_date == '1'">
+            AND mi.mstorage_in_date IS NOT NULL
+        </if>
+        <if test="mstorage_in_date == '0'">
+            AND mi.mstorage_in_date IS NULL
+        </if>
+        <if test="start_date != null and start_date != '' and end_date != null and end_date != ''">
+            AND po.purc_order_reg_date BETWEEN #{start_date} AND #{end_date}
+        </if>
+   			 </where>
+   		 ORDER BY po.purc_order_reg_date DESC
+	
+	</select>
+
+
+		<!-- 구매마감 처리 시 purc_order_status값 변경 -->
+		<update id="updatePurchaseOrderStatus" parameterType="list">
+		    UPDATE purchase_order
+		    SET purc_order_status = 1
+		    WHERE purc_order_no IN
+		    <foreach item="no" collection="list" open="(" separator="," close=")">
+		        #{no}
+		    </foreach>
+		</update>
 	
 </mapper>

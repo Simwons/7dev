@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.chill.inventory.mapper.InventoryMapper">
+
+    <resultMap id="inventoryStatusResultMap" type="kr.co.chill.inventory.dto.InventoryStatusDTO">
+        <result property="materialCode"    column="materialCode"/>
+        <result property="materialDesc"    column="materialDesc"/>
+        <result property="plantCode"       column="plantCode"/>
+        <result property="stockLocation"   column="stockLocation"/>
+        <result property="openingStock"    column="openingStock"/>
+        <result property="periodNetChange" column="periodNetChange"/>
+        <result property="stockQty"        column="stockQty"/>
+    </resultMap>
+
+    <resultMap id="materialDocumentResultMap" type="kr.co.chill.inventory.dto.MaterialDocumentDTO">
+        <result property="documentNo"      column="document_no"/>
+        <result property="materialCode"    column="materialCode"/>
+        <result property="materialDesc"    column="materialDesc"/>
+        <result property="quantity"        column="quantity"/>
+        <result property="plantCode"       column="plantCode"/>
+        <result property="stockLocation"   column="stockLocation"/>
+        <result property="documentDate"    column="document_date"/>
+        <result property="documentType"    column="document_type"/>
+    </resultMap>
+
+    <resultMap id="inventoryReportResultMap" type="kr.co.chill.inventory.dto.InventoryReportDTO">
+        <result property="materialType"          column="materialType"/>
+        <result property="plantCode"             column="plantCode"/>
+        <result property="stockLocation"         column="stockLocation"/>
+        <result property="openingStockQty"       column="openingStockQty"/>
+        <result property="periodNetChangeQty"    column="periodNetChangeQty"/>
+        <result property="stockQty"              column="stockQty"/>
+        <result property="openingStockAmount"    column="openingStockAmount"/>
+        <result property="inventoryAmount"       column="inventoryAmount"/>
+        <result property="periodNetChangeAmount" column="periodNetChangeAmount"/>
+    </resultMap>
+
+    <select id="selectInventoryStatus" parameterType="map" resultMap="inventoryStatusResultMap">
+        <![CDATA[
+            WITH
+            OpeningSnapshot AS (
+                SELECT
+                    ms.material_no, ms.plant_code, ms.mstorage_code,
+                    ms.mstorage_stock AS opening_stock, ms.snapshot_month
+                FROM material_storage ms
+                WHERE DATE(ms.snapshot_month) = (
+                    SELECT MAX(DATE(inner_ms.snapshot_month))
+                    FROM material_storage inner_ms
+                    WHERE DATE(inner_ms.snapshot_month) <= DATE(#{snapshotDate})
+                )
+            ),
+            PeriodDelta AS (
+                SELECT
+                    st.material_no, st.plant_code, st.mstorage_code,
+                    SUM(st.quantity) AS delta_quantity
+                FROM (
+                    SELECT mi.material_no, mi.plant_code, mi.mstorage_code, mi.material_in_cnt AS quantity
+                    FROM material_in mi
+                    WHERE DATE(mi.material_in_date) >= DATE(#{startDate}) AND DATE(mi.material_in_date) <= DATE(#{endDate})
+                    UNION ALL
+                    SELECT mo.material_no, mo.plant_code, mo.mstorage_code, -mo.material_out_cnt AS quantity
+                    FROM material_out mo
+                    WHERE DATE(mo.material_out_date) >= DATE(#{startDate}) AND DATE(mo.material_out_date) <= DATE(#{endDate})
+                ) st
+                GROUP BY st.material_no, st.plant_code, st.mstorage_code
+            )
+            SELECT
+                mm.material_code        AS materialCode,
+                mm.material_name        AS materialDesc,
+                snap.plant_code         AS plantCode,
+                snap.mstorage_code      AS stockLocation,
+                CAST(COALESCE(snap.opening_stock, 0) AS SIGNED) AS openingStock,
+                CAST(COALESCE(delta.delta_quantity, 0) AS SIGNED) AS periodNetChange,
+                CAST((COALESCE(snap.opening_stock, 0) + COALESCE(delta.delta_quantity, 0)) AS SIGNED) AS stockQty
+            FROM OpeningSnapshot snap
+            JOIN material mm ON snap.material_no = mm.material_no
+            LEFT JOIN PeriodDelta delta ON snap.material_no = delta.material_no
+                                      AND snap.plant_code = delta.plant_code
+                                      AND snap.mstorage_code = delta.mstorage_code
+        ]]>
+        <where>
+            <if test="materialCodeFrom != null and materialCodeFrom !=''"> <![CDATA[ AND mm.material_code >= #{materialCodeFrom} ]]> </if>
+            <if test="materialCodeTo != null and materialCodeTo != ''">   <![CDATA[ AND mm.material_code <= #{materialCodeTo} ]]> </if>
+            <if test="plantCodeFrom != null and plantCodeFrom != ''">     <![CDATA[ AND snap.plant_code >= #{plantCodeFrom} ]]> </if>
+            <if test="plantCodeTo != null and plantCodeTo != ''">       <![CDATA[ AND snap.plant_code <= #{plantCodeTo} ]]> </if>
+            <if test="storageCodeFrom != null and storageCodeFrom != ''"> <![CDATA[ AND snap.mstorage_code >= #{storageCodeFrom} ]]> </if>
+            <if test="storageCodeTo != null and storageCodeTo != ''">   <![CDATA[ AND snap.mstorage_code <= #{storageCodeTo} ]]> </if>
+        </where>
+        <![CDATA[ ORDER BY mm.material_code, snap.plant_code, snap.mstorage_code ]]>
+    </select>
+
+    <select id="selectMaterialDocuments" parameterType="map" resultMap="materialDocumentResultMap">
+        <![CDATA[
+            SELECT
+                mat_io.document_no,
+                mm.material_code AS materialCode,
+                mm.material_name AS materialDesc,
+                mat_io.quantity,
+                mat_io.plant_code AS plantCode,
+                mat_io.mstorage_code AS stockLocation,
+                mat_io.document_date,
+                mat_io.document_type
+            FROM (
+                SELECT mi.material_in_no AS document_no, mi.material_no, mi.material_in_cnt AS quantity,
+                       mi.plant_code, mi.mstorage_code, mi.material_in_date AS document_date, 'IN' AS document_type
+                FROM material_in mi
+                UNION ALL
+                SELECT mo.material_out_no AS document_no, mo.material_no, mo.material_out_cnt AS quantity,
+                       mo.plant_code, mo.mstorage_code, mo.material_out_date AS document_date, 'OUT' AS document_type
+                FROM material_out mo
+            ) mat_io
+            JOIN material mm ON mat_io.material_no = mm.material_no
+        ]]>
+        <where>
+            <![CDATA[ DATE(mat_io.document_date) >= DATE(#{startDate}) AND DATE(mat_io.document_date) <= DATE(#{endDate}) ]]>
+            <if test="materialCodeFrom != null and materialCodeFrom != ''"> <![CDATA[ AND mm.material_code >= #{materialCodeFrom} ]]> </if>
+            <if test="materialCodeTo != null and materialCodeTo != ''">   <![CDATA[ AND mm.material_code <= #{materialCodeTo} ]]> </if>
+            <if test="plantCodeFrom != null and plantCodeFrom != ''">     <![CDATA[ AND mat_io.plant_code >= #{plantCodeFrom} ]]> </if>
+            <if test="plantCodeTo != null and plantCodeTo != ''">       <![CDATA[ AND mat_io.plant_code <= #{plantCodeTo} ]]> </if>
+            <if test="storageCodeFrom != null and storageCodeFrom != ''"> <![CDATA[ AND mat_io.mstorage_code >= #{storageCodeFrom} ]]> </if>
+            <if test="storageCodeTo != null and storageCodeTo != ''">   <![CDATA[ AND mat_io.mstorage_code <= #{storageCodeTo} ]]> </if>
+        </where>
+        <![CDATA[ ORDER BY mat_io.document_date, mat_io.document_type ]]>
+    </select>
+
+    <select id="selectInventoryReport" parameterType="map" resultMap="inventoryReportResultMap">
+        <![CDATA[
+            WITH
+            UnitPrice AS (
+                SELECT mup.material_no, mup.sell_mprice
+                FROM material_unit_price mup
+            ),
+            OpeningSnapshot AS (
+                SELECT
+                    ms.material_no, ms.plant_code, ms.mstorage_code,
+                    ms.mstorage_stock AS opening_stock, ms.snapshot_month
+                FROM material_storage ms
+                WHERE DATE(ms.snapshot_month) = (
+                    SELECT MAX(DATE(inner_ms.snapshot_month))
+                    FROM material_storage inner_ms
+                    WHERE DATE(inner_ms.snapshot_month) <= DATE(#{snapshotDate})
+                )
+            ),
+            PeriodDelta AS (
+                 SELECT st.material_no, st.plant_code, st.mstorage_code,
+                       SUM(st.quantity) AS delta_quantity
+                 FROM (
+                    SELECT mi.material_no, mi.plant_code, mi.mstorage_code, mi.material_in_cnt AS quantity
+                    FROM material_in mi
+                    WHERE DATE(mi.material_in_date) >= DATE(#{startDate}) AND DATE(mi.material_in_date) <= DATE(#{endDate})
+                    UNION ALL
+                    SELECT mo.material_no, mo.plant_code, mo.mstorage_code, -mo.material_out_cnt AS quantity
+                    FROM material_out mo
+                    WHERE DATE(mo.material_out_date) >= DATE(#{startDate}) AND DATE(mo.material_out_date) <= DATE(#{endDate})
+                ) st
+                GROUP BY st.material_no, st.plant_code, st.mstorage_code
+            ),
+            MaterialType AS (
+                SELECT mm.material_no, mm.material_code,
+                       SUBSTRING(mm.material_code, 2, 3) AS material_type
+                FROM material mm
+            )
+            SELECT
+                mt.material_type        AS materialType,
+                snap.plant_code         AS plantCode,
+                snap.mstorage_code      AS stockLocation,
+                COALESCE(SUM(snap.opening_stock), 0)    AS openingStockQty,
+                COALESCE(SUM(delta.delta_quantity), 0)  AS periodNetChangeQty,
+                (COALESCE(SUM(snap.opening_stock), 0) +
+                 COALESCE(SUM(delta.delta_quantity), 0)) AS stockQty,
+                COALESCE(SUM(snap.opening_stock * COALESCE(up.sell_mprice, 0)), 0) AS openingStockAmount,
+                COALESCE(SUM((COALESCE(snap.opening_stock, 0) + COALESCE(delta.delta_quantity, 0)) * COALESCE(up.sell_mprice, 0)), 0) AS inventoryAmount,
+                (COALESCE(SUM((COALESCE(snap.opening_stock, 0) + COALESCE(delta.delta_quantity, 0)) * COALESCE(up.sell_mprice, 0)), 0) -
+                 COALESCE(SUM(snap.opening_stock * COALESCE(up.sell_mprice, 0)), 0)) AS periodNetChangeAmount
+            FROM OpeningSnapshot snap
+            LEFT JOIN PeriodDelta delta ON snap.material_no = delta.material_no
+                    AND snap.plant_code = delta.plant_code
+                    AND snap.mstorage_code = delta.mstorage_code
+            JOIN MaterialType mt ON snap.material_no = mt.material_no
+            LEFT JOIN UnitPrice up ON snap.material_no = up.material_no
+        ]]>
+        <where>
+            <if test="materialTypeFrom != null and materialTypeFrom != ''"> <![CDATA[ AND mt.material_type >= #{materialTypeFrom} ]]> </if>
+            <if test="materialTypeTo != null and materialTypeTo != ''">   <![CDATA[ AND mt.material_type <= #{materialTypeTo} ]]> </if>
+            <if test="materialCodeFrom != null and materialCodeFrom != ''"> <![CDATA[ AND mt.material_code >= #{materialCodeFrom} ]]> </if>
+            <if test="materialCodeTo != null and materialCodeTo != ''">   <![CDATA[ AND mt.material_code <= #{materialCodeTo} ]]> </if>
+            <if test="plantCodeFrom != null and plantCodeFrom != ''">     <![CDATA[ AND snap.plant_code >= #{plantCodeFrom} ]]> </if>
+            <if test="plantCodeTo != null and plantCodeTo != ''">       <![CDATA[ AND snap.plant_code <= #{plantCodeTo} ]]> </if>
+            <if test="storageCodeFrom != null and storageCodeFrom != ''"> <![CDATA[ AND snap.mstorage_code >= #{storageCodeFrom} ]]> </if>
+            <if test="storageCodeTo != null and storageCodeTo != ''">   <![CDATA[ AND snap.mstorage_code <= #{storageCodeTo} ]]> </if>
+        </where>
+        <![CDATA[ GROUP BY mt.material_type, snap.plant_code, snap.mstorage_code ]]>
+        <![CDATA[ ORDER BY mt.material_type, snap.plant_code, snap.mstorage_code ]]>
+    </select>
+</mapper>

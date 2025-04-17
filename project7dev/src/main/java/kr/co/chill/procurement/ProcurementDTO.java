@@ -3,7 +3,7 @@ package kr.co.chill.procurement;
 public class ProcurementDTO {
 	private int mppNo;				//부품조달계획고유번호
 	
-	private int mppCode;			//부품조달계획코드
+	private String mppCode;			//부품조달계획코드
 	private int mppVer;				//차수
 	private String mppRegDate;		//수립일
 	private String mppFile;			//첨부파일
@@ -11,6 +11,7 @@ public class ProcurementDTO {
 	private int prplNo;				//생산계획정보 로드용(제품명, 제품코드)
 	private String productName;		//제품명
 	private String productCode;		//제품코드
+	private int productCnt;			//생산계획수량
 	
 	private int mrpNo;				//자재소요계획정보 로드용(부품명, 부품코드, 자재창고코드, 총소요량, 가용재고, 포장단위, 리드타임)
 	private String materialName;	//부품명
@@ -20,6 +21,7 @@ public class ProcurementDTO {
 	private int mstorageStock;		//가용재고
 	private String mrpUnit;			//포장단위
 	private String mrpLeadtime;		//리드타임
+	private String mrpDueDate;      //자재납기일
 	
 	private int empNo;				//담당자정보 로드용(이름,연락처,이메일)
 	private String empName;			//담당자명
@@ -32,10 +34,10 @@ public class ProcurementDTO {
 		super();
 	}
 
-	public ProcurementDTO(int mppNo, int mppCode, int mppVer, String mppRegDate, String mppFile, int prplNo,
-			String productName, String productCode, int mrpNo, String materialName, String materialCode,
-			String mstorageCode, int mrpQuantity, int mstorageStock, String mrpUnit, String mrpLeadtime, int empNo,
-			String empName, String empPhone, String empEmail, String mppEtc) {
+	public ProcurementDTO(int mppNo, String mppCode, int mppVer, String mppRegDate, String mppFile, int prplNo,
+			String productName, String productCode, int productCnt, int mrpNo, String materialName, String materialCode,
+			String mstorageCode, int mrpQuantity, int mstorageStock, String mrpUnit, String mrpLeadtime,
+			String mrpDueDate, int empNo, String empName, String empPhone, String empEmail, String mppEtc) {
 		super();
 		this.mppNo = mppNo;
 		this.mppCode = mppCode;
@@ -45,6 +47,7 @@ public class ProcurementDTO {
 		this.prplNo = prplNo;
 		this.productName = productName;
 		this.productCode = productCode;
+		this.productCnt = productCnt;
 		this.mrpNo = mrpNo;
 		this.materialName = materialName;
 		this.materialCode = materialCode;
@@ -53,6 +56,7 @@ public class ProcurementDTO {
 		this.mstorageStock = mstorageStock;
 		this.mrpUnit = mrpUnit;
 		this.mrpLeadtime = mrpLeadtime;
+		this.mrpDueDate = mrpDueDate;
 		this.empNo = empNo;
 		this.empName = empName;
 		this.empPhone = empPhone;
@@ -68,11 +72,11 @@ public class ProcurementDTO {
 		this.mppNo = mppNo;
 	}
 
-	public int getMppCode() {
+	public String getMppCode() {
 		return mppCode;
 	}
 
-	public void setMppCode(int mppCode) {
+	public void setMppCode(String mppCode) {
 		this.mppCode = mppCode;
 	}
 
@@ -122,6 +126,14 @@ public class ProcurementDTO {
 
 	public void setProductCode(String productCode) {
 		this.productCode = productCode;
+	}
+
+	public int getProductCnt() {
+		return productCnt;
+	}
+
+	public void setProductCnt(int productCnt) {
+		this.productCnt = productCnt;
 	}
 
 	public int getMrpNo() {
@@ -188,6 +200,14 @@ public class ProcurementDTO {
 		this.mrpLeadtime = mrpLeadtime;
 	}
 
+	public String getMrpDueDate() {
+		return mrpDueDate;
+	}
+
+	public void setMrpDueDate(String mrpDueDate) {
+		this.mrpDueDate = mrpDueDate;
+	}
+
 	public int getEmpNo() {
 		return empNo;
 	}
@@ -232,11 +252,11 @@ public class ProcurementDTO {
 	public String toString() {
 		return "ProcurementDTO [mppNo=" + mppNo + ", mppCode=" + mppCode + ", mppVer=" + mppVer + ", mppRegDate="
 				+ mppRegDate + ", mppFile=" + mppFile + ", prplNo=" + prplNo + ", productName=" + productName
-				+ ", productCode=" + productCode + ", mrpNo=" + mrpNo + ", materialName=" + materialName
-				+ ", materialCode=" + materialCode + ", mstorageCode=" + mstorageCode + ", mrpQuantity=" + mrpQuantity
-				+ ", mstorageStock=" + mstorageStock + ", mrpUnit=" + mrpUnit + ", mrpLeadtime=" + mrpLeadtime
-				+ ", empNo=" + empNo + ", empName=" + empName + ", empPhone=" + empPhone + ", empEmail=" + empEmail
-				+ ", mppEtc=" + mppEtc + "]";
+				+ ", productCode=" + productCode + ", productCnt=" + productCnt + ", mrpNo=" + mrpNo + ", materialName="
+				+ materialName + ", materialCode=" + materialCode + ", mstorageCode=" + mstorageCode + ", mrpQuantity="
+				+ mrpQuantity + ", mstorageStock=" + mstorageStock + ", mrpUnit=" + mrpUnit + ", mrpLeadtime="
+				+ mrpLeadtime + ", mrpDueDate=" + mrpDueDate + ", empNo=" + empNo + ", empName=" + empName
+				+ ", empPhone=" + empPhone + ", empEmail=" + empEmail + ", mppEtc=" + mppEtc + "]";
 	}
 
 }

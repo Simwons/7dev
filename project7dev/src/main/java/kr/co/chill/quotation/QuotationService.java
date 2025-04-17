@@ -15,7 +15,7 @@ public interface QuotationService {
 	//수정
 	void updateQuotation(QuotationDTO quotationDTO) throws Exception;
 	//견적확정시
-	void updateQuotState(Map<String, Object> updateMap) throws Exception;
+	void updateQuotState(int quotNo) throws Exception;
 	//삭제
 	void deleteQuotation(int quotNo) throws Exception;
 

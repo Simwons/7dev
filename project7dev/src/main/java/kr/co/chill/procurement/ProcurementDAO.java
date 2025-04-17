@@ -11,5 +11,13 @@ public interface ProcurementDAO {
 	void createMpp(ProcurementDTO procurementDTO) throws Exception;
 	//수정
 	void updateMpp(ProcurementDTO procurementDTO) throws Exception;
+	//오늘 작성된 갯수
+	int countMppToday(String todayDate) throws Exception;
+	//조달계획 차수 
+	int countMppVer(String mppCode) throws Exception;
+	//제품번호로 가장 최신의 제품생산계획 불러오기
+	int getPrplNoByProductNo(int productNo) throws Exception;
+	//우리회사
+	CompanyDTO getCompanyByEmpNo(int empNo) throws Exception;
 
 }

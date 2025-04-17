@@ -20,7 +20,7 @@
 <br><br><br>
 	    <h3>견적 신규등록</h3>
 	    <h6>*표시는 필수입력입니다.</h6>
-	    <form action="${contextPath}/quotation/createQuotation" method="post">
+	    <form action="${contextPath}/quotation/createQuotation" method="post" enctype="multipart/form-data">
 			  <table border="1" cellpadding="5" cellspacing="0" style="width:100%; table-layout: fixed; border-collapse: collapse; text-align:center;">
 			    <tbody>
 			      <tr>
@@ -36,7 +36,7 @@
 			      </tr>
 			      <tr>
 			        <td class="label-cell" style="width:15%;">견적서</td>
-			        <td style="width:35%;"><input type="file" name="quotFile"style="width:90%; box-sizing: border-box;" ></td>
+			        <td style="width:35%;"><input type="file" name="file"style="width:90%; box-sizing: border-box;" ></td>
 			        <td class="label-cell" style="width:15%;">*인도조건</td>
 			        <td style="width:35%;">
 						<input type="radio" name="quotDterms" value="EXW" style="box-sizing: border-box;" checked required>EXW 
@@ -91,7 +91,7 @@
 			      <tr>
 			      	<td class="label-cell" style="width:15%;">*견적단가</td>
 			      	<td style="width:35%; box-sizing: border-box;">
-			      		<label><input type="text" name="quotPrice" required></label>
+			      		<input type="text" name="quotPrice" required>
 						<select name="quotPriceCurrency" id="selectField">
 				            <option value="KRW" selected>KRW</option>
 				            <option value="USD">USD</option>
@@ -102,7 +102,7 @@
 			      	</td>
 			      	<td class="label-cell" style="width:15%;">*수량</td>
 			      	<td style="width:35%; box-sizing: border-box;">
-			      		<label><input type="text" name="quotMaterialCnt" required></label>
+			      		<input type="text" name="quotMaterialCnt" required>
 			      		<select name="quotMaterialSku" id="selectField">
 				            <option value="EA" selected>EA</option>
 				            <option value="BOX">BOX</option>
@@ -134,23 +134,6 @@
 	      		<button type="button" onclick="history.back()">닫기</button>
 	      	  </div>
 	    </form>
-		<div id="supplierModal" style="display: none; position: fixed; top:20%; left:30%; background: white; border: 1px solid #ccc; padding: 20px;">
-		  <h3>조회 결과</h3>
-		  <table id="supplierTable" border="1">
-		    <thead>
-		      <tr>
-		      	<th>사업자등록번호</th>
-		      	<th>회사명</th>
-		      	<th>선택</th>
-	      	  </tr>
-		    </thead>
-		    <tbody>
-		    
-		    </tbody>
-		  </table>
-		  <button onclick="closeSupplierModal()">닫기</button>
-		</div>
-	    
 	    
 		<script>
 		function toggleDaysInput(enabled) {

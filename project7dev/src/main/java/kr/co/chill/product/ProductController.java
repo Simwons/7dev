@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +41,8 @@ public class ProductController {
 	@GetMapping("product/product_main")
 	public String productMain(@RequestParam(value = "searchType", required = false)String searchType
 			, @RequestParam(value = "searchValue", required = false)String searchValue
+			, HttpSession session
+			, HttpServletRequest request
 			, Model model) throws Exception {
 		List<ProductDTO> productList;
 		
@@ -56,14 +60,18 @@ public class ProductController {
 	}
 	//품목추가
 	@PostMapping("product/createProduct")
-	public String createProduct(@ModelAttribute("product")ProductDTO productDTO) throws Exception {
+	public String createProduct(@ModelAttribute("product")ProductDTO productDTO
+			, HttpSession session
+			, HttpServletRequest request) throws Exception {
 		productService.createProduct(productDTO);
 		
 		return "product/product_main";
 	}
 	//특정 제품 bom 보기
 	@GetMapping("product/product_bom")
-	public String bom(@RequestParam("productNo") int productNo, Model model) throws Exception {
+	public String bom(@RequestParam("productNo") int productNo, Model model
+			, HttpSession session
+			, HttpServletRequest request) throws Exception {
 		ProductDTO productDTO = productService.getProductByProductNo(productNo);
 		List<MaterialDTO> materialList = materialService.getMaterialByProductNo(productNo);
 		

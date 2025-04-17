@@ -3,15 +3,83 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.chill.mrpMapper">
-	<!-- 자재소요계획 상세보기(선택) -->
-	<select id="readMrpByMrpNo" resultType="MrpDTO">
-		select material_resource_plan.*, product.product_name, product.product_code, material.material_name, material.material_code, 
-		material.material_sku, material.material_leadtime, employee.emp_no, employee.emp_name, employee.emp_phone, employee.emp_email
+	<!-- 자재소요계획 전체보기 -->
+	<select id="readMrp" resultType="MrpDTO">
+		select DISTINCT 		
+		material_resource_plan.mrp_no AS mrpNo,
+		material_resource_plan.product_no AS productNo,
+		material_resource_plan.material_no AS materialNo,
+		material_resource_plan.mstorage_no AS mstorageNo,
+		material_resource_plan.mrp_code AS mrpCode,
+		material_resource_plan.mrp_quantity AS mrpQuantity,
+		material_resource_plan.mrp_sku AS mrpSku,
+		material_resource_plan.mrp_due_date AS mrpDueDate,
+		material_resource_plan.mrp_leadtime AS mrpLeadtime,
+		material_resource_plan.mrp_etc AS mrpEtc,
+		material_resource_plan.emp_no AS empNo,
+
+		material_storage.mstorage_code as mstorageCode,
+		
+		production_planning.prpl_no as prplNo,
+		
+		product.product_name AS productName,
+		product.product_code AS productCode,
+
+		material.material_name AS materialName,
+		material.material_code AS materialCode,
+		material.material_sku AS materialSku,
+		material.material_leadtime AS materialLeadtime,
+
+		employee.emp_name AS empName,
+		employee.emp_phone AS empPhone,
+		employee.emp_email AS empEmail
 		from material_resource_plan
+		join material_storage on material_resource_plan.mstorage_no = material_storage.mstorage_no
+		join product on material_resource_plan.product_no = product.product_no
+		join production_planning on material_resource_plan.prpl_no = production_planning.prpl_no
+		join material on material_resource_plan.material_no = material.material_no
+		join employee on material_resource_plan.emp_no = employee.emp_no
+		ORDER BY mrp_code
+	</select>
+	<!-- 자재소요계획 상세보기(선택) -->
+	<select id="readMrpByMrpCode" parameterType="String" resultType="MrpDTO">
+		select
+		material_resource_plan.mrp_no AS mrpNo,
+		material_resource_plan.product_no AS productNo,
+		material_resource_plan.material_no AS materialNo,
+		material_resource_plan.mstorage_no AS mstorageNo,
+		material_resource_plan.mrp_code AS mrpCode,
+		material_resource_plan.mrp_quantity AS mrpQuantity,
+		material_resource_plan.mrp_sku AS mrpSku,
+		material_resource_plan.mrp_due_date AS mrpDueDate,
+		material_resource_plan.mrp_leadtime AS mrpLeadtime,
+		material_resource_plan.mrp_etc AS mrpEtc,
+		material_resource_plan.emp_no AS empNo,
+		
+		material_storage.mstorage_code as mstorageCode,
+		
+		production_planning.prpl_no as prplNo,
+
+		product.product_name AS productName,
+		product.product_code AS productCode,
+
+		material.material_name AS materialName,
+		material.material_code AS materialCode,
+		material.material_sku AS materialSku,
+		material.material_raw_material AS materialRawMaterial,
+		material.material_description AS materialDescription,
+		material.material_unit AS materialUnit,
+		
+		employee.emp_name AS empName,
+		employee.emp_phone AS empPhone,
+		employee.emp_email AS empEmail
+		from material_resource_plan
+		join material_storage on material_resource_plan.mstorage_no = material_storage.mstorage_no
+		join production_planning on material_resource_plan.prpl_no = production_planning.prpl_no
 		join product on material_resource_plan.product_no = product.product_no
 		join material on material_resource_plan.material_no = material.material_no
 		join employee on material_resource_plan.emp_no = employee.emp_no
-		where mrp_no=#{mrpNo}
+		where mrp_code=#{mrpCode}
 	</select>
 	<!-- 자재소요계획 검색 -->
 	<select id="searchMrp" parameterType="map" resultType="MrpDTO">
@@ -27,7 +95,75 @@
 	</select>
 	<!-- 자재소요계획 등록 -->
 	<insert id="createMrp" parameterType="MrpDTO">
-		insert into material_resource_plan(product_no, material_no, mstorage_no, mrp_quantity, mrp_sku, mrp_due_date, mrp_leadtime, mrp_etc)
-		values(#{productNo}, #{materialNo}, #{mstorageNo}, #{mrpQuantity}, #{mrpSku}, #{mrpDueDate}, #{mrpLeadtime}, #{mrpEtc})
+		insert into material_resource_plan(product_no, material_no, mstorage_no, emp_no, mrp_code, mrp_quantity, mrp_sku, mrp_due_date, mrp_leadtime, mrp_etc)
+		values(#{productNo}, #{materialNo}, 1, 4, #{mrpCode}, #{mrpQuantity}, #{mrpSku}, #{mrpDueDate}, #{mrpLeadtime}, #{mrpEtc})
 	</insert>
+	<!-- 오늘 날짜인 mrp 갯수 세기 -->
+	<select id="countMrpToday" resultType="int">
+    	SELECT COUNT(*) FROM material_resource_plan
+    	WHERE DATE_FORMAT('now()', '%Y%m%d') = #{todayDate}
+	</select>
+	<!-- mrpno로 mrpcode가져오기(mpp에서 사용) -->
+	<select id="getMrpCodeByMrpNo" parameterType="int" resultType="String">
+	    SELECT mrp_code FROM material_resource_plan
+	    WHERE mrp_no = #{mrpNo}
+	    Limit 1
+	</select>
+	<!-- mrpno로 mrp가져오기 -->
+	<select id="getMrpByMrpNo" parameterType="int" resultType="MrpDTO">
+		select
+		material_resource_plan.mrp_no AS mrpNo,
+		material_resource_plan.product_no AS productNo,
+		material_resource_plan.material_no AS materialNo,
+		material_resource_plan.mstorage_no AS mstorageNo,
+		material_resource_plan.mrp_code AS mrpCode,
+		material_resource_plan.mrp_quantity AS mrpQuantity,
+		material_resource_plan.mrp_sku AS mrpSku,
+		material_resource_plan.mrp_due_date AS mrpDueDate,
+		material_resource_plan.mrp_leadtime AS mrpLeadtime,
+		material_resource_plan.mrp_etc AS mrpEtc,
+		material_resource_plan.emp_no AS empNo,
+		
+		material_storage.mstorage_code as mstorageCode,
+		
+		production_planning.prpl_no as prplNo,
+
+		product.product_name AS productName,
+		product.product_code AS productCode,
+
+		material.material_name AS materialName,
+		material.material_code AS materialCode,
+		material.material_sku AS materialSku,
+		material.material_leadtime AS materialLeadtime,
+		material.material_description AS materialDescription,
+		material.material_unit AS materialUnit,
+		material.material_raw_material AS materialRawMaterial,
+		
+		material_unit_price.mprice_no AS mpriceNo,
+        material_unit_price.sell_mprice AS sellMprice,
+        material_unit_price.cont_mprice AS contMprice,
+        material_unit_price.mprice_currency AS mpriceCurrency,
+
+		quotation.quot_no as quotNo,
+		
+		contract.cont_no as contNo,
+		contract.cont_dterms as contDterms,
+
+		employee.emp_name AS empName,
+		employee.emp_phone AS empPhone,
+		employee.emp_email AS empEmail
+		
+		from material_resource_plan
+		join material_storage on material_resource_plan.mstorage_no = material_storage.mstorage_no
+		join production_planning on material_resource_plan.prpl_no = production_planning.prpl_no
+		join product on material_resource_plan.product_no = product.product_no
+		join material on material_resource_plan.material_no = material.material_no
+		join employee on material_resource_plan.emp_no = employee.emp_no
+		join material_unit_price on material.material_no = material_unit_price.material_no
+		join quotation on material.material_no = quotation.material_no
+		join contract on quotation.quot_no = contract.quot_no
+		
+		where mrp_No=#{mrpNo}	
+	</select>
+	
 </mapper>

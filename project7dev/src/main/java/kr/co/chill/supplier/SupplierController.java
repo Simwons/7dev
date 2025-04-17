@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +25,8 @@ public class SupplierController {
 	@GetMapping("supplier/supplier_main")
 	public String supplierMain(@RequestParam(value = "searchType", required = false)String searchType
 			, @RequestParam(value = "searchValue", required = false)String searchValue
+			, HttpSession session
+			, HttpServletRequest request
 			, Model model) throws Exception {
 		List<SupplierDTO> supplierList;
 		
@@ -40,7 +44,9 @@ public class SupplierController {
 	}
 	//거래처 신규등록
 	@PostMapping("supplier/createSupplier")
-	public String createSupplier(@ModelAttribute("supplier")SupplierDTO supplierDTO) throws Exception {
+	public String createSupplier(@ModelAttribute("supplier")SupplierDTO supplierDTO
+			, HttpSession session
+			, HttpServletRequest request) throws Exception {
 		
 		supplierService.createSupplier(supplierDTO);
 		return "redirect:/supplier/supplier_main";
@@ -48,6 +54,8 @@ public class SupplierController {
 	//거래처 상세보기
 	@GetMapping("supplier/getSupplierBySupNo")
 	public String getSupplierBySupNo(@RequestParam("supNo")int supNo
+			, HttpSession session
+			, HttpServletRequest request
 			, Model model) throws Exception {
 		SupplierDTO supplierDTO = supplierService.readSupplierBySupNo(supNo);
 		model.addAttribute("supplierDTO", supplierDTO);
@@ -57,6 +65,8 @@ public class SupplierController {
 	//거래처 수정으로 이동
 	@GetMapping("supplier/getUpdateSupplier")
 	public String getUpdateSupplier(@RequestParam("supNo")int supNo
+			, HttpSession session
+			, HttpServletRequest request
 			, Model model) throws Exception {
 		SupplierDTO supplierDTO = supplierService.readSupplierBySupNo(supNo);
 		model.addAttribute("supplierDTO", supplierDTO);
@@ -64,20 +74,26 @@ public class SupplierController {
 	}
 	//수정하기
 	@PostMapping("supplier/updateSupplier")
-	public String updateSupplier(@ModelAttribute("supplier")SupplierDTO supplierDTO) throws Exception {
+	public String updateSupplier(@ModelAttribute("supplier")SupplierDTO supplierDTO
+			, HttpSession session
+			, HttpServletRequest request) throws Exception {
 		supplierService.updateSupplier(supplierDTO);
 		return "redirect:/supplier/getSupplierBySupNo?supNo="+supplierDTO.getSupNo();
 	}
 	//삭제하기
 	@PostMapping("supplier/deleteSupplier")
-	public String deleteSupplier(@RequestParam("supNo")int supNo) throws Exception {
+	public String deleteSupplier(@RequestParam("supNo")int supNo
+			, HttpSession session
+			, HttpServletRequest request) throws Exception {
 		supplierService.deleteSupplier(supNo);
 		return "redirect:/supplier/supplier_main";
 	}
 	//사업자번호로 거래처조회
 	@GetMapping("supplier/getSupplierBySupRegNo")
 	@ResponseBody
-	public List<SupplierDTO> getSupplierBySupRegNo(@RequestParam String supRegNo) throws Exception {
+	public List<SupplierDTO> getSupplierBySupRegNo(@RequestParam String supRegNo
+			, HttpSession session
+			, HttpServletRequest request) throws Exception {
 		System.out.println("담겨온값:"+supRegNo);
 		List<SupplierDTO> supplierList = supplierService.getSupplierBySupRegNo(supRegNo);
 		System.out.println(supplierList);

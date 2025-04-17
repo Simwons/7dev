@@ -14,6 +14,7 @@
 	<select id="readQuotationByQuotNo" resultType="QuotationDTO">
 		select quotation.quot_no as quotNo, 
         quotation.quot_code as quotCode,
+        quotation.quot_state as quotState,
         quotation.sup_no as supNo, 
         quotation.quot_file as quotFile,
         quotation.quot_dterms as quotDterms, 
@@ -83,7 +84,7 @@
 		where quot_no=#{quotNo}
 	</update>
 	<!-- 견적 확정시(계약서에 견적서가 첨부되어 작성 완료 시) -->
-	<update id="updateQuotState" parameterType="map">
+	<update id="updateQuotState" parameterType="int">
 		update quotation
 		set quot_state = quot_state + 1
 		where quot_no=#{quotNo}

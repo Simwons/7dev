@@ -26,7 +26,7 @@ public class MaterialDTO {
 	}
 
 	public MaterialDTO(String materialNo, String materialName, String materialRawMaterial, String materialCode,
-			String materialDescription, String materialUnit, String materialFile, int productNo, int materialQuantity,
+			String materialDescription, String materialUnit, String materialFile, int materialQuantity, int productNo,
 			String materialSku, int materialLeadtime, int materialMoq, int materialSkuQuantity, String materialEtc,
 			int supNo) {
 		super();
@@ -37,8 +37,8 @@ public class MaterialDTO {
 		this.materialDescription = materialDescription;
 		this.materialUnit = materialUnit;
 		this.materialFile = materialFile;
-		this.productNo = productNo;
 		this.materialQuantity = materialQuantity;
+		this.productNo = productNo;
 		this.materialSku = materialSku;
 		this.materialLeadtime = materialLeadtime;
 		this.materialMoq = materialMoq;
@@ -103,20 +103,20 @@ public class MaterialDTO {
 		this.materialFile = materialFile;
 	}
 
-	public int getProductNo() {
-		return productNo;
-	}
-
-	public void setProductNo(int productNo) {
-		this.productNo = productNo;
-	}
-
 	public int getMaterialQuantity() {
 		return materialQuantity;
 	}
 
 	public void setMaterialQuantity(int materialQuantity) {
 		this.materialQuantity = materialQuantity;
+	}
+
+	public int getProductNo() {
+		return productNo;
+	}
+
+	public void setProductNo(int productNo) {
+		this.productNo = productNo;
 	}
 
 	public String getMaterialSku() {
@@ -172,9 +172,11 @@ public class MaterialDTO {
 		return "MaterialDTO [materialNo=" + materialNo + ", materialName=" + materialName + ", materialRawMaterial="
 				+ materialRawMaterial + ", materialCode=" + materialCode + ", materialDescription="
 				+ materialDescription + ", materialUnit=" + materialUnit + ", materialFile=" + materialFile
-				+ ", productNo=" + productNo + ", materialQuantity=" + materialQuantity + ", materialSku=" + materialSku
+				+ ", materialQuantity=" + materialQuantity + ", productNo=" + productNo + ", materialSku=" + materialSku
 				+ ", materialLeadtime=" + materialLeadtime + ", materialMoq=" + materialMoq + ", materialSkuQuantity="
 				+ materialSkuQuantity + ", materialEtc=" + materialEtc + ", supNo=" + supNo + "]";
 	}
+
+	
 
 }

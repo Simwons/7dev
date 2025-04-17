@@ -41,6 +41,8 @@ public class ContractController {
 	@GetMapping("contract/contract_main")
 	public String contractMain(@RequestParam(value = "searchType", required = false)String searchType
 			, @RequestParam(value = "searchValue", required = false)String searchValue
+			, HttpSession session
+			, HttpServletRequest request
 			, Model model) throws Exception {
 		List<ContractDTO> contractList;
 		if(searchType!=null && searchValue != null && !searchValue.isEmpty()) {
@@ -60,6 +62,8 @@ public class ContractController {
 	@GetMapping("contract/selectQuotation")
 	public String selectQuotation(@RequestParam(value = "searchType", required = false)String searchType
 			, @RequestParam(value = "searchValue", required = false)String searchValue
+			, HttpSession session
+			, HttpServletRequest request
 			, Model model) throws Exception {
 		List<QuotationDTO> quotationList;
 		
@@ -78,6 +82,8 @@ public class ContractController {
 	//신규등록2 - 선택한 견적 계약서 작성
 	@GetMapping("contract/getCreateContract")
 	public String getCreateContract(@RequestParam("quotNo")int quotNo
+			, HttpSession session
+			, HttpServletRequest request
 			, Model model) throws Exception {
 		QuotationDTO quotationDTO = quotationService.readQuotationByQuotNo(quotNo);
 		SupplierDTO supplierDTO = supplierService.readSupplierBySupNo(quotationDTO.getSupNo());
@@ -109,8 +115,9 @@ public class ContractController {
 
 	        contractDTO.setContFile(fileName); // DB에 파일명 저장
 	    }
-		
-		
+	    
+	    quotationService.updateQuotState(contractDTO.getQuotNo());
+	    
 		contractService.createMprice(contractDTO);
 		contractService.createContract(contractDTO);
 		
@@ -122,6 +129,8 @@ public class ContractController {
 	//계약서 상세보기
 	@GetMapping("contract/selectContract")
 	public String selectContract(@RequestParam("contNo")int contNo
+			, HttpSession session
+			, HttpServletRequest request
 			,Model model) throws Exception {
 		ContractDTO contractDTO = contractService.readContractByContNo(contNo);
 		
@@ -137,7 +146,5 @@ public class ContractController {
 		return "contract/contract_selectContract";
 	}
 		
-	
-	
 	
 }

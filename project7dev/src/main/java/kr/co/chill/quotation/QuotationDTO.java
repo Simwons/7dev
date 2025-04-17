@@ -26,6 +26,9 @@ public class QuotationDTO {
 	private String quotDueDate;			//납기일
 	private String quotEtc;				//기타사항
 	
+	private String quotDate;			//작성일
+	private int quotState;				//계약확정여부
+	
 	public QuotationDTO() {
 		super();
 	}
@@ -33,7 +36,8 @@ public class QuotationDTO {
 	public QuotationDTO(int quotNo, String quotCode, int supNo, String supName, String supRegNo, String quotFile,
 			String quotDterms, String quotPterms, int materialNo, String materialName, String materialCode,
 			String materialRawMaterial, String materialDescription, String materialUnit, int quotPrice,
-			String quotPriceCurrency, int quotMaterialCnt, String quotMaterialSku, String quotDueDate, String quotEtc) {
+			String quotPriceCurrency, int quotMaterialCnt, String quotMaterialSku, String quotDueDate, String quotEtc,
+			String quotDate, int quotState) {
 		super();
 		this.quotNo = quotNo;
 		this.quotCode = quotCode;
@@ -55,6 +59,8 @@ public class QuotationDTO {
 		this.quotMaterialSku = quotMaterialSku;
 		this.quotDueDate = quotDueDate;
 		this.quotEtc = quotEtc;
+		this.quotDate = quotDate;
+		this.quotState = quotState;
 	}
 
 	public int getQuotNo() {
@@ -217,6 +223,22 @@ public class QuotationDTO {
 		this.quotEtc = quotEtc;
 	}
 
+	public String getQuotDate() {
+		return quotDate;
+	}
+
+	public void setQuotDate(String quotDate) {
+		this.quotDate = quotDate;
+	}
+
+	public int getQuotState() {
+		return quotState;
+	}
+
+	public void setQuotState(int quotState) {
+		this.quotState = quotState;
+	}
+
 	@Override
 	public String toString() {
 		return "QuotationDTO [quotNo=" + quotNo + ", quotCode=" + quotCode + ", supNo=" + supNo + ", supName=" + supName
@@ -226,7 +248,7 @@ public class QuotationDTO {
 				+ materialDescription + ", materialUnit=" + materialUnit + ", quotPrice=" + quotPrice
 				+ ", quotPriceCurrency=" + quotPriceCurrency + ", quotMaterialCnt=" + quotMaterialCnt
 				+ ", quotMaterialSku=" + quotMaterialSku + ", quotDueDate=" + quotDueDate + ", quotEtc=" + quotEtc
-				+ "]";
+				+ ", quotDate=" + quotDate + ", quotState=" + quotState + "]";
 	}
 	
 }

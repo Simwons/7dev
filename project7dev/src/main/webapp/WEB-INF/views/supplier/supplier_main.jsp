@@ -198,6 +198,8 @@
 	    document.getElementById("newSupplierModal").style.display = "none";
 	    document.getElementById("modalBackdrop").style.display = "none";
 	  }
+	  
+	  
 	</script>
 
 
